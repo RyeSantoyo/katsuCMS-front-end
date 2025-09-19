@@ -1,9 +1,9 @@
 import {UnitDto, UnitCreateDto, UnitUpdateDto} from "../types/unit";
 
-const API_URL = "http://localhost:5058/api";
+const API_URL = "http://localhost:5058/api/units";
 
 export async function getUnits(): Promise<UnitDto[]> {
-    const res = await fetch(`${API_URL}/units`);
+    const res = await fetch(API_URL);
     if (!res.ok) {
         throw new Error('Failed to fetch units');
     }
