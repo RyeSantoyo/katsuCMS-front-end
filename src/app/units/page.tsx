@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import {getUnits, createUnit, deleteUnit, updateUnit} from "../../services/unitservice";
 import { UnitDto, UnitCreateDto, UnitUpdateDto } from "../../types/unit";
 import toast from "react-hot-toast";
+import Modal from "@/components/Modal";
 
 export default function UnitsPage(){
     const [units, setUnits] = useState<UnitDto[]>([]);
     const [newUnit, setNewUnit]= useState("");
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedUnit, setSelectedUnit] = useState<UnitDto | null>(null);
-    const [editUnitName, setEditUnitName] = useState("");
+    //const [loading, setLoading] = useState(true);
+    const [showAddModal, setShowAddModal]= useState(false);
     
     useEffect(()=>{
         loadUnits();
@@ -26,18 +26,25 @@ export default function UnitsPage(){
         }
     }
     async function handleAdd() {
-        console.log("Add Button Clicked");
+       console.log("Add Button Clicked");
 
-        if (!newUnit.trim()) return;
+        if (!newUnit.trim()){
+            loadUnits();
+             return toast.error("No available Unit");
+        }
+        else{
         try {
             await createUnit({ unitName: newUnit });
             setNewUnit("");
+            setShowAddModal(false);
             await loadUnits();
             toast.success("Unit created successfully ✅"); // success instead of error
         } catch (err) {
             console.error("Failed to create unit", err);
             toast.error("Failed to create unit ❌");
         }
+        }
+
     }
 
     async function handleDelete(id: number){
@@ -52,22 +59,24 @@ export default function UnitsPage(){
             toast.error("Failed to delete unit");
         }
     }
+    // if(loading) return<p>Loading....</p>;
 
     return(
         <div className="p-4 bg-white rounded shadow max-w-3xl mx-auto mt-10">
             <h1 className="text-2xl font-bold mb-4 text-black" >Units</h1>
 
             <div className="flex gap-2 mb-4 text-black">
-                <input
+                {/* <input
                     type="text"
                     value={newUnit}
                     onChange={(e)=> setNewUnit(e.target.value)}
                     placeholder="Add new unit"
-                    className="border p-3 py-2 rounded w-64" />
-                    <button onClick={handleAdd}
+                    className="border p-3 py-2 rounded w-64" /> */}
+                    <button onClick={()=> setShowAddModal(true)}
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Add
                     </button>
+                    
             </div>
             <table className="min-w-full border text-center">
                 <thead className="text-center text-lg text-gray-700">
@@ -93,8 +102,24 @@ export default function UnitsPage(){
                 </tbody>
             </table>
 
-            <div className="modal-action">
-            </div>
+                    <Modal
+                        isOpen={showAddModal}
+                        title="Add New Unit"
+                        content={
+                            <input type="text" value={newUnit}
+                            onChange={(e) => setNewUnit(e.target.value)}
+                            placeholder="Unit name"
+                            className="w-full border px-3 py-2 rounded"
+                            />
+                        }
+                        onCancel={()=> {
+                            setNewUnit("");
+                            setShowAddModal(false)
+                        }}
+                        onConfirm={handleAdd}
+                        confirmText="Save"
+                        confirmColor="bg-green-600"
+                    />
         </div>
     )
 }
