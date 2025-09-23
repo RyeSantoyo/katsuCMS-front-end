@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import {getUnits, createUnit, deleteUnit, updateUnit} from "../../services/unitservice";
-import { UnitDto, UnitCreateDto, UnitUpdateDto } from "../../types/unit";
+import {getUnits, createUnit, deleteUnit} from "../../services/unitservice"; //, updateUnit - Remove
+import { UnitDto } from "../../types/unit"; //, UnitCreateDto, UnitUpdateDto - Removed
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
 
 export default function UnitsPage(){
     const [units, setUnits] = useState<UnitDto[]>([]);
@@ -58,6 +60,10 @@ export default function UnitsPage(){
             console.error("Failed to delete unit", err);
             toast.error("Failed to delete unit");
         }
+        return(
+            <DataTable columns={columns({onDelete: handleDelete})}
+            data={units}/>
+        )
     }
     // if(loading) return<p>Loading....</p>;
 
@@ -78,29 +84,7 @@ export default function UnitsPage(){
                     </button>
                     
             </div>
-            <table className="min-w-full border text-center">
-                <thead className="text-center text-lg text-gray-700">
-                    <tr> 
-                        <th className="py-2 px-4 border-b">ID</th>
-                        <th className="py-2 px-4 border-b">Unit Name</th>
-                        <th className="py-2 px-4 border-b">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className="text-center text-lg text-gray-700">
-                    {units.map((u)=>(
-                        <tr key={u.id}>
-                            <td className="border px-4 py-2">{u.id}</td>
-                            <td className="border px-4 py-2">{u.unitName}</td>
-                            <td className="border px-4 py-2">
-                                <button onClick={()=> handleDelete(u.id)}
-                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                        <DataTable columns={columns({onDelete:handleDelete})} data={units}/>
 
                     <Modal
                         isOpen={showAddModal}
@@ -123,3 +107,27 @@ export default function UnitsPage(){
         </div>
     )
 }
+
+/*            <table className="min-w-full border text-center">
+                <thead className="text-center text-lg text-gray-700">
+                    <tr> 
+                        <th className="py-2 px-4 border-b">ID</th>
+                        <th className="py-2 px-4 border-b">Unit Name</th>
+                        <th className="py-2 px-4 border-b">Actions</th>
+                    </tr>
+                </thead>
+                <tbody className="text-center text-lg text-gray-700">
+                    {units.map((u)=>(
+                        <tr key={u.id}>
+                            <td className="border px-4 py-2">{u.id}</td>
+                            <td className="border px-4 py-2">{u.unitName}</td>
+                            <td className="border px-4 py-2">
+                                <button onClick={()=> handleDelete(u.id)}
+                                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table> */
