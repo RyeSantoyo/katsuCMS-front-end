@@ -2,14 +2,19 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
+//import { UnitDto } from "@/types/unit"; commented out
+
 export type Unit ={
     id: number
     unitName: string
 }
 
-export const columns = ({ onDelete }: { onDelete: (id: number) => void }): ColumnDef<Unit>[] => [
+export const columns = ({ onDelete,   onEdit }: { 
+                            onDelete: (id: number) => void;                           
+                            onEdit: (id:Unit)=> void;
+                            }): ColumnDef<Unit>[] => [
     {
-        accessorKey:"id",
+        accessorKey:"id",   
         header : "Id"
     },
     {
@@ -27,14 +32,13 @@ export const columns = ({ onDelete }: { onDelete: (id: number) => void }): Colum
                     <Button
                     variant="outline"
                     size="sm"
-                    onClick={()=> console.log("Edit", unit)}>Edit</Button>
+                    onClick={() => onEdit(unit)}>Edit</Button>
                     
                     <Button
                     variant="destructive"
                     size="sm"
-                    onClick={()=> console.log("Delete", unit)}>Delete</Button>
-                </div>
-                
+                    onClick={()=> onDelete(row.original.id)}>Delete</Button>
+                </div>             
             )
         },
     

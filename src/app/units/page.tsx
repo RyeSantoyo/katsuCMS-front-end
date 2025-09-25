@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import {getUnits, createUnit, deleteUnit} from "../../services/unitservice"; //, updateUnit - Remove
+import {getUnits, createUnit, deleteUnit, updateUnit} from "../../services/unitservice"; //, updateUnit - Remove
 import { UnitDto } from "../../types/unit"; //, UnitCreateDto, UnitUpdateDto - Removed
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
 import { DataTable } from "./data-table";
-import { columns } from "./columns";
+import { columns} from "./columns"; // removed , Unit 
 
 export default function UnitsPage(){
     const [units, setUnits] = useState<UnitDto[]>([]);
@@ -13,7 +13,9 @@ export default function UnitsPage(){
 
     //const [loading, setLoading] = useState(true);
     const [showAddModal, setShowAddModal]= useState(false);
-    
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingUnit, setEditingUnit] = useState<UnitDto | null>(null);
+
     useEffect(()=>{
         loadUnits();
     },[]);
@@ -61,10 +63,31 @@ export default function UnitsPage(){
             toast.error("Failed to delete unit");
         }
         return(
-            <DataTable columns={columns({onDelete: handleDelete})}
+            <DataTable columns={columns({onDelete: handleDelete, onEdit:handleUpdate})}
             data={units}/>
         )
     }
+
+        function handleEdit(unit: UnitDto){
+            setEditingUnit(unit)
+            setShowEditModal(true);
+
+        }
+        async function handleUpdate() {
+        if (!editingUnit) return;
+
+        try {
+            await updateUnit(editingUnit.id, editingUnit); // 🔥 tawag sa API
+            toast.success("Unit updated successfully!");
+            loadUnits(); // refresh list
+            setShowEditModal(false);
+            setEditingUnit(null);
+        } catch (err) {
+            console.error("Failed to update unit", err);
+            toast.error("Failed to update unit");
+        }
+        }
+
     // if(loading) return<p>Loading....</p>;
 
     return(
@@ -84,7 +107,7 @@ export default function UnitsPage(){
                     </button>
                     
             </div>
-                        <DataTable columns={columns({onDelete:handleDelete})} data={units}/>
+                        <DataTable columns={columns({onDelete:handleDelete, onEdit:handleEdit})} data={units}/>
 
                     <Modal
                         isOpen={showAddModal}
@@ -104,10 +127,37 @@ export default function UnitsPage(){
                         confirmText="Save"
                         confirmColor="bg-green-600"
                     />
+                    
+                    <Modal
+                        isOpen={showEditModal}
+                        title="Edit Unit"
+                        content={
+                            <input
+                            type="text"
+                            value={editingUnit?.unitName || ""}
+                            onChange={(e) =>
+                                setEditingUnit((prev) =>
+                                prev ? { ...prev, unitName: e.target.value } : null
+                                )
+                            }
+                            placeholder="Unit name"
+                            className="w-full border px-3 py-2 rounded"
+                            />
+                        }
+                        onCancel={() => {
+                            setShowEditModal(false);
+                            setEditingUnit(null);
+                        }}
+                        onConfirm={handleUpdate}
+                        confirmText="Update"
+                        confirmColor="bg-blue-600"
+                    />
+
         </div>
     )
 }
 
+//#region 
 /*            <table className="min-w-full border text-center">
                 <thead className="text-center text-lg text-gray-700">
                     <tr> 
@@ -131,3 +181,4 @@ export default function UnitsPage(){
                     ))}
                 </tbody>
             </table> */
+            //#endregion
