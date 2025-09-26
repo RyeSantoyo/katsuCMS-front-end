@@ -72,7 +72,10 @@ export default function SupplierPage(){
             }
             return;
     }
-
+    function handleEdit(supplier : SupplierDto){
+        setEditingSupplier(supplier)
+        setShowAddModal(true);
+    }
     async function handleUpdate(){
         if(!editingSupplier) return;
 
@@ -86,8 +89,14 @@ export default function SupplierPage(){
         }
         catch(err){
             console.log(err);
-            toast.error("Errpr");
+            toast.error(`Failed to update ${editingSupplier.supplierName}`);
         }
-
     }
+
+        return(
+                <div>
+                    
+                </div>
+        )
+
 }

@@ -73,6 +73,7 @@ export default function UnitsPage(){
             setShowEditModal(true);
 
         }
+        
         async function handleUpdate() {
         if (!editingUnit) return;
 
@@ -123,7 +124,7 @@ export default function UnitsPage(){
                             setNewUnit("");
                             setShowAddModal(false)
                         }}
-                        onConfirm={handleAdd}
+                        onConfirm={ handleAdd}
                         confirmText="Save"
                         confirmColor="bg-green-600"
                     />
