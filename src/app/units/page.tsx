@@ -153,7 +153,6 @@ export default function UnitsPage(){
                         confirmText="Update"
                         confirmColor="bg-blue-600"
                     />
-
         </div>
     )
 }

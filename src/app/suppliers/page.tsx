@@ -1,11 +1,12 @@
 "use client";
 import {useEffect, useState} from "react";
-import {getSupplier, createSupplier, updateSupplier, deleteSupplier, getSuppliers} from "../../services/supplierservice"
+import {createSupplier, updateSupplier, deleteSupplier, getSuppliers} from "../../services/supplierservice"
 import { SupplierDto } from "@/types/supplier";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
+import { DataTable } from "./data-table";
 //import { DataTable } from "./data-table";
-//import {columns} from "./columns";
+import {columns} from "./columns";
 
 export default function SupplierPage(){
 
@@ -17,7 +18,7 @@ export default function SupplierPage(){
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingSupplier, setEditingSupplier] = useState<SupplierDto | null>(null);
-
+    
     useEffect(()=>{
             loadSupplier();
     },[]);
@@ -94,9 +95,104 @@ export default function SupplierPage(){
     }
 
         return(
-                <div>
+                <div className="p-4 bg-gray rounded shadow max-w-3xl mx-auto mt-10">
+                    <h1 className="text-2xl font-bold mb-4 text-black" >Supplier</h1>
                     
+                    <div className="flex gap-2 mb-4 text-black">
+                        <button onClick={()=> setShowAddModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Addd
+                        </button>
+                    </div>
+                    
+                        <DataTable columns={columns({onDelete: handleDelete, onEdit: handleEdit})} data={supplier}/>
+                        
+                        <Modal
+                        isOpen={showAddModal}
+                        title="Add New Supplier"
+                        content={
+                            <>
+                            <input type="text" value={newSupplier}
+                            onChange={(e) => setNewSupplier(e.target.value)}
+                            placeholder="Supplier"
+                            className="w-full border px-3 py-2 rounded" />
+                            
+                            <input type="text" value={newAddress}
+                            onChange={(e)=> setNewAddress(e.target.value)}
+                            placeholder="Set New Address"
+                            className="w-full border px-3 py-2 rounded"/>
+
+                            <input type="text" value={newContact}
+                            onChange={(e)=> setNewContact(e.target.value)}
+                            placeholder="Set Contact Number"
+                            className="w-full border px-3 py-2 rounded" />
+                            </>
+                        }
+                        onCancel={()=>{
+                            setNewAddress("");
+                            setNewContact("");
+                            setNewSupplier("");
+                            setShowAddModal(false);
+                        }}
+
+                        onConfirm={handleAdd}
+                        confirmText="Save"
+                        confirmColor="bg-blue-600"
+                        />
+
+
+                        <Modal
+                        isOpen={showEditModal}
+                        title="Edit Supplier Info."
+                        content={
+                            <>
+                            <input
+                            type="text"
+                            value={editingSupplier?.supplierName || ""}
+                            onChange={(e)=> 
+                                setEditingSupplier((prev) =>
+                                prev?{...prev, supplierName: e.target.value} : null
+                                )
+                            }
+                            placeholder="Supplier Name"
+                            className="w-full border px-3 py-2 rounded"
+                            />
+                                                        <input
+                            type="text"
+                            value={editingSupplier?.address || ""}
+                            onChange={(e)=> 
+                                setEditingSupplier((prev) =>
+                                prev?{...prev, address: e.target.value} : null
+                                )
+                            }
+                            placeholder="Address"
+                            className="w-full border px-3 py-2 rounded"
+                            />
+                            <input
+                            type="text"
+                            value={editingSupplier?.ContactNumber || ""}
+                            onChange={(e)=> 
+                                setEditingSupplier((prev) =>
+                                prev?{...prev, ContactNumber: e.target.value} : null
+                                )
+                            }
+                            placeholder="ContactNumber"
+                            className="w-full border px-3 py-2 rounded"
+                            />
+                            </>
+                        }
+                        onCancel={()=>{
+                            setNewAddress("");
+                            setNewContact("");
+                            setNewSupplier("");
+                            setShowAddModal(false);
+                        }}
+
+                        onConfirm={handleUpdate}
+                        confirmText="Save"
+                        confirmColor="bg-blue-600"
+                        />
                 </div>
         )
 
 }
+

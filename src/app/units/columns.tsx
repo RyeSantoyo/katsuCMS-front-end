@@ -4,15 +4,15 @@ import { ColumnDef } from "@tanstack/react-table";
 import {Button} from "@/components/ui/button";
 //import { UnitDto } from "@/types/unit"; commented out
 
-export type Unit ={
+export type UnitDto ={
     id: number
     unitName: string
 }
 
 export const columns = ({ onDelete,   onEdit }: { 
                             onDelete: (id: number) => void;                           
-                            onEdit: (id:Unit)=> void;
-                            }): ColumnDef<Unit>[] => [
+                            onEdit: (id:UnitDto)=> void;
+                            }): ColumnDef<UnitDto>[] => [
     {
         accessorKey:"id",   
         header : "Id"
