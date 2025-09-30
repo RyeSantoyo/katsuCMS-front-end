@@ -22,7 +22,7 @@ export async function getCategory(id: number): Promise<PCategoryDto>{
         return res.data;
 }
 
-export async function createUnit(dto: PCategoryCreateDto): Promise<PCategoryDto>{
+export async function createCategory(dto: PCategoryCreateDto): Promise<PCategoryDto>{
     // const res = await fetch(API_URL,{
     //     method: "POST",
     //     headers: {"Content-Type": "application/category"},
@@ -34,7 +34,7 @@ export async function createUnit(dto: PCategoryCreateDto): Promise<PCategoryDto>
         return res.data;
 }
 
-export async function  updateUnit(id: number, dto: PCategoryUpdateDto){
+export async function  updateCategory(id: number, dto: PCategoryUpdateDto){
     // const res = await fetch(`${API_URL}/${id}`,{
     //     method: "PUT",
     //     headers: {"Content-Type": "application/json"},
@@ -49,7 +49,7 @@ export async function  updateUnit(id: number, dto: PCategoryUpdateDto){
 
 }
 
-export async function deleteUnit(id: number){
+export async function deleteCategory(id: number){
         const res = await api.delete<PCategoryDto>(`/category/${id}`);
         return res.data;
     // const res = await fetch(`${API_URL}/${id}`,{
