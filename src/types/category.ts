@@ -1,12 +1,12 @@
 export interface PCategoryDto{
     id: number;
-    unitName: string;
+    categoryName: string;
 }
 
 export interface PCategoryCreateDto{
-    unitName: string;
+    categoryName: string;
 }
 
 export interface PCategoryUpdateDto{
-    unitName: string;
+    categoryName: string;
 }

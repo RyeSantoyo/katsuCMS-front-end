@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import {getUnits, createUnit, deleteUnit, updateUnit} from "../../services/unitservice"; //, updateUnit - Remove
+import {unitServices} from "../../services/unitservice"; //, updateUnit - Remove
 import { UnitDto } from "../../types/unit"; //, UnitCreateDto, UnitUpdateDto - Removed
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
@@ -22,7 +22,7 @@ export default function UnitsPage(){
 
     async function loadUnits(){
         try{
-            const data = await getUnits();
+            const data = await unitServices.getAll();
             setUnits(data);
         }catch(error){
             console.error("Failed to load units", error);
@@ -38,7 +38,7 @@ export default function UnitsPage(){
         }
         else{
         try {
-            await createUnit({ unitName: newUnit });
+            await unitServices.create({ unitName: newUnit });
             setNewUnit("");
             setShowAddModal(false);
             await loadUnits();
@@ -55,7 +55,7 @@ export default function UnitsPage(){
         const confirmDelete = window.confirm("Are you sure you want to delete this unit?");
         if (!confirmDelete) return;
         try{
-            await deleteUnit(id);
+            await unitServices.delete(id);
             loadUnits();
         }
         catch (err){
@@ -78,7 +78,7 @@ export default function UnitsPage(){
         if (!editingUnit) return;
 
         try {
-            await updateUnit(editingUnit.id, editingUnit); // 🔥 tawag sa API
+            await unitServices.update(editingUnit.id, editingUnit); // 🔥 tawag sa API
             toast.success("Unit updated successfully!");
             loadUnits(); // refresh list
             setShowEditModal(false);

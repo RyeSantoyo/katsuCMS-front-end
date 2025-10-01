@@ -1,6 +1,7 @@
 "use client";
 import {useEffect, useState} from "react";
-import {createSupplier, updateSupplier, deleteSupplier, getSuppliers} from "../../services/supplierservice"
+import {supplierServices} from "../../services/supplierservice"
+// import {createSupplier, updateSupplier, deleteSupplier, getSuppliers} from "../../services/supplierservice"
 import { SupplierDto } from "@/types/supplier";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
@@ -25,7 +26,7 @@ export default function SupplierPage(){
 
     async function loadSupplier(){
         try{
-            const data = await getSuppliers();
+            const data = await supplierServices.getAll();
             setSupplier(data);
         }catch(error){
             console.error("Failed to load suppliers" , error);
@@ -42,7 +43,7 @@ export default function SupplierPage(){
         }
         else{
             try{
-                await createSupplier({
+                await supplierServices.create({
                     supplierName: newSupplier,
                     address: newAddress,
                     ContactNumber: newContact
@@ -64,7 +65,7 @@ export default function SupplierPage(){
             if(!confirm) return;
 
             try{
-                await deleteSupplier(id);
+                await supplierServices.delete(id);
                 loadSupplier();
             }
             catch(err){
@@ -81,7 +82,7 @@ export default function SupplierPage(){
         if(!editingSupplier) return;
 
         try{
-            await updateSupplier(editingSupplier.id, editingSupplier);
+            await supplierServices.update(editingSupplier.id, editingSupplier);
             toast.success("Supplier updated successfully");
             loadSupplier();
             setShowEditModal(false);

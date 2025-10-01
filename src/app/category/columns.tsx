@@ -3,15 +3,15 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
-export type CategoryDto ={
+export type PCategoryDto ={
     id: number
     categoryName : string
 }
 
 export const columns = ({onDelete, onEdit}: {
                         onDelete:(id:number) => void;
-                        onEdit: (id:CategoryDto) => void;
-                            }) : ColumnDef<CategoryDto>[] =>[
+                        onEdit: (id:PCategoryDto) => void;
+                            }) : ColumnDef<PCategoryDto>[] =>[
             {
                 accessorKey: "id",
                 header: "Id"
