@@ -10,7 +10,7 @@ export async function getCategories(){
     //     throw new Error('Failed to fetch category');
     // }
     // return res.json();
-        const res = await api.get<PCategoryDto[]>("/units");
+        const res = await api.get<PCategoryDto[]>("/category");
         return res.data;
 }
 

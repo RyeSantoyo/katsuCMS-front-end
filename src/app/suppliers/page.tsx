@@ -32,7 +32,7 @@ export default function SupplierPage(){
             console.error("Failed to load suppliers" , error);
             toast.error("Failed to load supplier");
         }
-    }
+    } 
 
     async function handleAdd(){
         console.log("Add button clicked");
@@ -157,7 +157,7 @@ export default function SupplierPage(){
                             placeholder="Supplier Name"
                             className="w-full border px-3 py-2 rounded"
                             />
-                                                        <input
+                            <input
                             type="text"
                             value={editingSupplier?.address || ""}
                             onChange={(e)=> 

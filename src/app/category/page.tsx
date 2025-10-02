@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
 import { DataTable} from "./data-table";
 import {columns } from "./columns";
-import { tree } from "next/dist/build/templates/app-page";
+//import { tree } from "next/dist/build/templates/app-page";
 
 export default function CategoryPage(){
 
@@ -26,7 +26,7 @@ export default function CategoryPage(){
                 const data = await getCategories();
                 setCategory(data);
             }catch(error){
-                console.error("Failed to load Category");
+                console.error("Failed to load Category", error);
                 toast.error("Failed")
             }
         }
@@ -86,16 +86,67 @@ export default function CategoryPage(){
                 loadCategory();
             }
             catch(err){
-                console.error("Failed to delete category");
+                console.error("Failed to delete category", err);
                 toast.error("Failed");
             }
-
-            return(
-                <DataTable columns={columns({onDelete: handleDelete, onEdit: handleEdit }
-
-                )}
-                data={category}/>    
-            
-            )
         }
+
+        return(
+                <div className="p-4 bg-gray rounder shadow max-w-3xl mx-auto mt-10">
+                    <h1 className="text-2x font-bold mb-4 text-black"> Category</h1>
+                
+                <div className="flex gap-2 mb-4 text-black">
+                    <button onClick={()=> setShowAddModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-400">
+                        Add
+                    </button>
+                </div>
+                <DataTable columns={columns({onDelete:handleDelete, onEdit:handleEdit})} data={category}/>
+
+                <Modal
+                    isOpen={showAddModal}
+                    title = "Add New Category"
+                    content ={
+                        <>
+                            <input type="text" value={newCategory}
+                            onChange={(e)=> setNewcategory(e.target.value)}
+                            placeholder="New Category"
+                            className="w-full border px-3 py-2 rounded"/>
+                        </>
+                    }
+                    onCancel={()=>{
+                        setNewcategory("");
+                        setShowAddModal(false);
+                    }}
+                    onConfirm={handleAdd}
+                    confirmText="Save"
+                    confirmColor="bg-blue-600"
+                    />
+
+                    <Modal
+                        isOpen = {showEditModal}
+                        title  = "Edit Category"
+                        content={
+                            <>
+                             <input type="text"
+                             value = {editingCategory?.categoryName || ""}
+                             onChange={(e)=>
+                                setEditingCategory((prev)=>
+                                prev?{...prev, categoryName: e.target.value} : null)
+                             }
+                        placeholder="Category "
+                        className="w-full borde px-3 py-2 rounded"/>
+
+                            </>
+                        }
+                        onCancel={()=>{
+                        setNewcategory("");
+                        setShowAddModal(false);
+                        }}
+                        onConfirm={handleUpdate}
+                        confirmText="Save"
+                        confirmColor="bg-blue-600"
+                        />
+                </div>               
+        )
+
 }
