@@ -2,7 +2,8 @@ import { createCrudService } from "./crudServices";
 import {SupplierDto, SupplierCreateDto, SupplierUpdateDto} from "@/types/supplier"
 
 export const supplierServices = 
-    createCrudService<SupplierDto,SupplierCreateDto,SupplierUpdateDto>("/supplier");
+    createCrudService<SupplierDto,
+    SupplierCreateDto,SupplierUpdateDto>("/supplier");
 
 
 // //import { ok } from "assert";
