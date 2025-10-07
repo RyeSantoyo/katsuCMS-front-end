@@ -17,7 +17,7 @@ import { SupplierDto } from "@/types/supplier";
 export default function ProductPage(){
     const [products, setProducts] = useState<ProductDto[]>([]);
     const [newProductCode, setNewProductCode] = useState("");
-    const [newProduct, setNewProduct] = useState("");
+    const [newProductName, setNewProductName] = useState("");
     const [newPrice, setNewPrice] = useState(0);
     const [newStock, setNewStock] = useState(0);
     const [newDescription , setNewDescription] = useState("");
@@ -33,7 +33,7 @@ export default function ProductPage(){
     const [units, setUnits] = useState<UnitDto[]>([]);
 
     useEffect(()=>{
-
+            loadProducts();
             loadAllData();
     },[]);
 
@@ -67,15 +67,15 @@ export default function ProductPage(){
     async function handleAdd(){
         console.log("Add button clicked");
  
-        if(!newProduct.trim() || !newCategory.trim() || !newUnit.trim() || !newSupplier.trim()){
+        if(!newProductName.trim() || !newCategory.trim() || !newUnit.trim() || !newSupplier.trim()){
                 loadAllData();
                 return toast.error("No available data");
         }
         else{
             try{
                 await productServices.create({
-                    productCode: `P-${Math.floor(1000 + Math.random() * 9000)}`,
-                    productName: newProduct,
+                    productCode: newProductCode,
+                    productName: newProductName,
                     quantity: newStock,
                     description: newDescription,
                     price: newPrice,
@@ -83,7 +83,7 @@ export default function ProductPage(){
                     unitId: parseInt(newUnit),
                     supplierId: [parseInt(newSupplier)]
                 });
-                setNewProduct("");
+                setNewProductName("");
                 setShowAddModal(false);
                 await loadAllData()
                 toast.success("Product added");
@@ -114,4 +114,77 @@ export default function ProductPage(){
         setEditingProduct(product)
         setShowEditModal(true);
     }
+    async function handleUpdate(){
+        if(!editingProduct) return;
+        try{
+            await productServices.update(editingProduct.id, editingProduct);
+            toast.success("Product updated successfully");
+            loadAllData();
+            setShowEditModal(false);
+            setEditingProduct(null);
+        } catch(err){
+            console.log(err);
+            toast.error("Failed to update product");
+        }
+    }
+
+    return (
+        <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
+            <h1 className="text-2xl font-bold mb-4">Products</h1>
+            <div className="flex gap-2 mb-4 text-black">
+                <button 
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                    onClick={() => setShowAddModal(true)}
+                >
+                    Add Product
+                </button>
+                <DataTable columns={columns({onEdit: handleEdit, onDelete: handleDelete})} data={products} />
+
+                <Modal
+                    isOpen={showAddModal}
+                    onConfirm={handleAdd}
+                    onCancel={() => setShowAddModal(false)}
+                    title="Add Product"
+
+                    content={
+                            <div className="space-y-4">
+                                <input type="text" placeholder="Product Code" value={newProductCode} onChange ={(e) => setNewProductCode(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
+                                <input type="text" placeholder="Product Name" value={newProductName} onChange ={(e) => setNewProductName(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
+                                <input type="number" placeholder="Price" value={newPrice} onChange ={(e) => setNewPrice(parseFloat(e.target.value))} className="w-full p-2 border border-gray-300 rounded" />
+                                <input type="number" placeholder="Stock" value={newStock} onChange ={(e) => setNewStock(parseInt(e.target.value))} className="w-full p-2 border border-gray-300 rounded" />
+                                <textarea placeholder="Description" value={newDescription} onChange ={(e) => setNewDescription(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />  
+                            
+                            {/* Category Dropdown */}
+                            <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
+                                <option value="">Select Category</option>
+                                {categories.map((cat) => (
+                                    <option key={cat.id} value={cat.id}>{cat.categoryName}</option>
+                                ))}
+                            </select>
+                            {/* Unit Dropdown */}
+
+                            <select value={newUnit} onChange ={(e) => setNewUnit(parseInt(e.target.value).toString())} className="w-full p-2 border border-gray-300 rounded">
+                                <option value="">Select Unit</option>
+                                {units.map((unit) => (
+                                    <option key={unit.id} value={unit.id}>{unit.unitName}</option>
+                                ))}
+                            </select>
+                            
+                            {/* Supplier Dropdown */}
+                                <select value={newSupplier} onChange={(e) =>
+                                    setNewSupplier(Array.from(e.target.selectedOptions, 
+                                        (opts) => opts.value).toString())
+                                }>
+                                         <option value="">Select Supplier</option>
+                                        {suppliers.map((sup) => (
+                                        <option key={sup.id} value={sup.id}>{sup.supplierName}</option>
+                                        ))}
+                                        
+                                </select>
+                            </div>
+                    }
+                    />
+            </div>
+        </div>
+    )
 }

@@ -9,7 +9,7 @@ export interface ProductDto{
     categoryName : string;
     unitId : number;
     unitName : string;
-    supplierIds : number[];
+    supplierId : number[];
     supplierNames : string[];
 }
 

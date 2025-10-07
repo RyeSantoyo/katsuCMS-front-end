@@ -1,11 +1,11 @@
-import {api }from "../lib/api";
+//import {api }from "../lib/api";
 import { createCrudService } from "./crudServices";
 import {ProductCreateDto, ProductDto, ProductUpdateDto} from "../types/products";
 
 export const productServices = 
 createCrudService<ProductDto, 
 ProductCreateDto, 
-ProductUpdateDto>("/product");
+ProductUpdateDto>("/products");
 
 //#region 
 // export async function getProducts(){
