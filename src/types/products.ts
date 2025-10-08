@@ -9,7 +9,7 @@ export interface ProductDto{
     categoryName : string;
     unitId : number;
     unitName : string;
-    supplierId : number[];
+    supplierIds : number[];
     supplierNames : string[];
 }
 
@@ -21,7 +21,7 @@ export interface ProductCreateDto{
     price: number;
     categoryId: number;
     unitId: number;
-    supplierId: number[];
+    supplierIds: number[];
 }
 export interface ProductUpdateDto extends ProductCreateDto {
     id: number

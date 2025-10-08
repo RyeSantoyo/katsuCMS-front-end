@@ -81,7 +81,7 @@ export default function ProductPage(){
                     price: newPrice,
                     categoryId: parseInt(newCategory),
                     unitId: parseInt(newUnit),
-                    supplierId: [parseInt(newSupplier)]
+                    supplierIds: [parseInt(newSupplier)]
                 });
                 setNewProductName("");
                 setShowAddModal(false);
@@ -148,6 +148,7 @@ export default function ProductPage(){
 
                     content={
                             <div className="space-y-4">
+                                <label>Product Code</label>
                                 <input type="text" placeholder="Product Code" value={newProductCode} onChange ={(e) => setNewProductCode(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
                                 <input type="text" placeholder="Product Name" value={newProductName} onChange ={(e) => setNewProductName(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
                                 <input type="number" placeholder="Price" value={newPrice} onChange ={(e) => setNewPrice(parseFloat(e.target.value))} className="w-full p-2 border border-gray-300 rounded" />
