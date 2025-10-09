@@ -13,6 +13,8 @@ import {columns} from "./columns";
 import { PCategoryDto } from "../category/columns";
 import { UnitDto } from "../units/columns";
 import { SupplierDto } from "@/types/supplier";
+import SupplierMultiSelect from "./multi-select";
+
 
 export default function ProductPage(){
     const [products, setProducts] = useState<ProductDto[]>([]);
@@ -31,6 +33,8 @@ export default function ProductPage(){
     const [categories, setCategories] = useState<PCategoryDto[]>([]);
     const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);
     const [units, setUnits] = useState<UnitDto[]>([]);
+
+    const [newSuppliers, setNewSuppliers] = useState<{ value: number; label: string }[]>([]);
 
     useEffect(()=>{
             loadProducts();
@@ -81,7 +85,7 @@ export default function ProductPage(){
                     price: newPrice,
                     categoryId: parseInt(newCategory),
                     unitId: parseInt(newUnit),
-                    supplierIds: [parseInt(newSupplier)]
+                    supplierIds: newSuppliers.map((s) => s.value),
                 });
                 setNewProductName("");
                 setShowAddModal(false);
@@ -172,16 +176,11 @@ export default function ProductPage(){
                             </select>
                             
                             {/* Supplier Dropdown */}
-                                <select value={newSupplier} onChange={(e) =>
-                                    setNewSupplier(Array.from(e.target.selectedOptions, 
-                                        (opts) => opts.value).toString())
-                                }>
-                                         <option value="">Select Supplier</option>
-                                        {suppliers.map((sup) => (
-                                        <option key={sup.id} value={sup.id}>{sup.supplierName}</option>
-                                        ))}
-                                        
-                                </select>
+                                <SupplierMultiSelect
+                                suppliers={suppliers}
+                                newSuppliers={newSuppliers}
+                                setNewSuppliers={setNewSuppliers}
+                                />
                             </div>
                     }
                     />

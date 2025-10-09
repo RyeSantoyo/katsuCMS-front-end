@@ -1,6 +1,7 @@
 "use client";
 import {useEffect, useState} from "react";
-import {getCategories, createCategory, deleteCategory, updateCategory} from "../../services/categoryservice"
+import {categoryServices} from "../../services/categoryservice"
+//import {getCategories, createCategory, deleteCategory, updateCategory} from "../../services/categoryservice"
 import { PCategoryDto } from "../../types/category";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
@@ -23,7 +24,7 @@ export default function CategoryPage(){
 
         async function loadCategory(){
             try{
-                const data = await getCategories();
+                const data = await categoryServices.getAll();
                 setCategory(data);
             }catch(error){
                 console.error("Failed to load Category", error);
@@ -40,7 +41,7 @@ export default function CategoryPage(){
             }
             else{
                 try{
-                    await createCategory({categoryName : newCategory});
+                    await categoryServices.create({categoryName : newCategory});
                     setNewcategory("");
                     setShowAddModal(false);
                     await loadCategory();
@@ -62,7 +63,7 @@ export default function CategoryPage(){
             if(!editingCategory) return;
 
             try{
-                await updateCategory(editingCategory.id, editingCategory);
+                await (editingCategory.id, editingCategory);
                 toast.success("Updated Successfully");
                 loadCategory()
                 setShowEditModal(false);
@@ -82,7 +83,7 @@ export default function CategoryPage(){
 
             if(!confirmDelete) return;
             try{
-                await deleteCategory(id);
+                await categoryServices.delete(id);
                 loadCategory();
             }
             catch(err){

@@ -42,7 +42,7 @@ export const columns =({onDelete, onEdit}:
     header : "Unit"
 },
 {
-    accessorKey: "supplierName",
+    accessorKey: "supplierNames",
     header : "Suppliers"
 },
 {
