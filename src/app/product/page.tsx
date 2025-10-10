@@ -88,7 +88,15 @@ export default function ProductPage(){
                     supplierIds: newSuppliers.map((s) => s.value),
                 });
                 setNewProductName("");
+                setNewProductCode("");
+                setNewPrice(0);
+                setNewStock(0);
+                setNewDescription("");
+                setNewCategory("");
+                setNewUnit("");
+                setNewSuppliers([]);
                 setShowAddModal(false);
+                setNewSupplier("");
                 await loadAllData()
                 toast.success("Product added");
             } catch(err){

@@ -1,7 +1,6 @@
 import { createCrudService } from "./crudServices";
 import {StoreCreateDto, StoreUpdateDto, StoreDto} from "../types/store";
+import { ProductUpdateDto } from "@/types/products";
 
 export const storeServices = 
-createCrudService<StoreCreateDto, 
-StoreUpdateDto, 
-StoreDto>("/products");
+createCrudService<StoreDto, StoreCreateDto, StoreUpdateDto>("/stores");
