@@ -25,8 +25,8 @@ export default function StorePage(){
             const data = await storeServices.getAll();
             setStores(data);
         }catch(error){
-            console.error("Failed to load units", error);
-            toast.error("Failed to load units");
+            console.error("Failed to load stores", error);
+            toast.error("Failed to load stores");
         }
     }
     async function handleAdd(){
@@ -76,8 +76,8 @@ export default function StorePage(){
 
     async function handleDelete(id: number){
         const storeToDelete = stores.find((s) => s.id === id);
-        const confirm = window.confirm(`Are you sure you want to delete ${storeToDelete}?`);
-        if(!confirm) return toast.error("Store not found");
+        const confirm = window.confirm(`Are you sure you want to delete ${storeToDelete ? storeToDelete.name: "this store"}`);
+        if(!confirm) return;
 
         try{
             await storeServices.delete(id);
@@ -92,11 +92,9 @@ export default function StorePage(){
 
     return(
 
-        <div className="p-4">
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Store Management</h1>
-                </div>
-                <button 
+        <div className="p-4 bg-gray rounder shadow max-w-3xl mx-auto mt-10">
+                <h1 className="text-2x font-bold mb-4 text-black">Store Management</h1>
+                <button onClick={()=>setShowAddModal(true)}
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" >
                     Add Store
                     </button>
@@ -106,16 +104,19 @@ export default function StorePage(){
                         title = "Register New Store"
                         content ={
                             <>
+                            <label>Store Name</label>
                             <input type="text" value={newStoreName}
                             onChange={(e)=> setNewStoreName(e.target.value)}
                             placeholder="Store Name"
                             className="w-full p-2 border border-gray-300 rounded mb-2"
                             />
+                            <label>Address</label>
                             <input type="text" value={newAddress}
                             onChange={(e)=> setNewAddress(e.target.value)}
                             placeholder="Address"
                             className="w-full p-2 border border-gray-300 rounded mb-2"
                             />
+                            <label>Contact Number</label>
                             <input type="text" value={newContactNumber}
                             onChange={(e)=> setNewContactNumber(e.target.value)}
                             placeholder="Contact Number"
@@ -139,6 +140,7 @@ export default function StorePage(){
                         title = "Edit Store"
                         content ={
                             <>
+                            <label>Store Name</label>
                             <input type="text" value={editingStore?.name || ""}
                             onChange={(e)=>
                                 setEditingStore((prev)=>
