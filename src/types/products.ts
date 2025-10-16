@@ -2,7 +2,7 @@ export interface ProductDto{
     id: number;
     productCode : string;
     productName : string;
-    quantity : number;
+    //quantity : number;
     description : string;
     price : number;
     categoryId : number;
@@ -16,7 +16,7 @@ export interface ProductDto{
 export interface ProductCreateDto{
     productCode: string;
     productName: string;
-    quantity: number;
+    //quantity: number;
     description: string;
     price: number;
     categoryId: number;

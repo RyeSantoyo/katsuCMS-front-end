@@ -21,7 +21,7 @@ export default function ProductPage(){
     const [newProductCode, setNewProductCode] = useState("");
     const [newProductName, setNewProductName] = useState("");
     const [newPrice, setNewPrice] = useState(0);
-    const [newStock, setNewStock] = useState(0);
+    //const [newStock, setNewStock] = useState(0);
     const [newDescription , setNewDescription] = useState("");
     const [newCategory, setNewCategory] = useState("");
     const [newSupplier, setNewSupplier] = useState("");
@@ -71,16 +71,12 @@ export default function ProductPage(){
     async function handleAdd(){
         console.log("Add button clicked");
  
-        if(!newProductName.trim() || !newCategory.trim() || !newUnit.trim() || !newSupplier.trim()){
-                loadAllData();
-                return toast.error("No available data");
-        }
-        else{
+
             try{
                 await productServices.create({
                     productCode: newProductCode,
                     productName: newProductName,
-                    quantity: newStock,
+                    //quantity: newStock,
                     description: newDescription,
                     price: newPrice,
                     categoryId: parseInt(newCategory),
@@ -90,7 +86,7 @@ export default function ProductPage(){
                 setNewProductName("");
                 setNewProductCode("");
                 setNewPrice(0);
-                setNewStock(0);
+                //setNewStock(0);
                 setNewDescription("");
                 setNewCategory("");
                 setNewUnit("");
@@ -103,7 +99,7 @@ export default function ProductPage(){
                 console.log("Failed",err)
                 toast.error("Failed misserably");
             }
-        }   
+           
     }
 
     async function handleDelete(id: number , productName:string ){
@@ -162,9 +158,11 @@ export default function ProductPage(){
                             <div className="space-y-4">
                                 <label>Product Code</label>
                                 <input type="text" placeholder="Product Code" value={newProductCode} onChange ={(e) => setNewProductCode(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
+                                <label>Product Name</label>
                                 <input type="text" placeholder="Product Name" value={newProductName} onChange ={(e) => setNewProductName(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
+                                <label>Price</label>
                                 <input type="number" placeholder="Price" value={newPrice} onChange ={(e) => setNewPrice(parseFloat(e.target.value))} className="w-full p-2 border border-gray-300 rounded" />
-                                <input type="number" placeholder="Stock" value={newStock} onChange ={(e) => setNewStock(parseInt(e.target.value))} className="w-full p-2 border border-gray-300 rounded" />
+                                {/* <input type="number" placeholder="Stock" value={newStock} onChange ={(e) => setNewStock(parseInt(e.target.value))} className="w-full p-2 border border-gray-300 rounded" /> */}
                                 <textarea placeholder="Description" value={newDescription} onChange ={(e) => setNewDescription(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />  
                             
                             {/* Category Dropdown */}
