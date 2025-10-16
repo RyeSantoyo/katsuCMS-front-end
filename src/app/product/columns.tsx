@@ -21,10 +21,10 @@ export const columns =({onDelete, onEdit}:
     accessorKey:"productName",
     header : "Product"
 },
-{
-    accessorKey:"quantity",
-    header: "Quantity"
-},
+// {
+//     accessorKey:"quantity",
+//     header: "Quantity"
+// },
 {
     accessorKey: "description",
     header : "Description"
