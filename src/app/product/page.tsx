@@ -71,7 +71,6 @@ export default function ProductPage(){
     async function handleAdd(){
         console.log("Add button clicked");
  
-
             try{
                 await productServices.create({
                     productCode: newProductCode,
