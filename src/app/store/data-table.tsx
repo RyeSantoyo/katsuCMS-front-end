@@ -15,7 +15,7 @@ import{
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { columns } from "./columns";
+//import { columns } from "./columns";
 
 interface DataTableProps<TData, TValue>{
         columns : ColumnDef<TData, TValue>[]
