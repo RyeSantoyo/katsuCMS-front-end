@@ -10,7 +10,7 @@ export interface InventoryStockDto{
     preferredStockLevel: number;
     isLowStock : boolean;
     inventoryValue : number;
-    lastUpdated: Date;
+    lastUpdated: string;
     supplierNames : string[];
 }
 

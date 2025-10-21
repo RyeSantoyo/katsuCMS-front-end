@@ -4,8 +4,14 @@ import {api} from "../lib/api"
 export function createCrudService<TDto, TCreateDto, TUpdateDto>(basePath : string){
     return {
         getAll: async (): Promise<TDto[]> =>{
+            try{
             const res = await api.get<TDto[]>(basePath);
             return res.data;
+            }
+            catch (err: unknown){
+                  console.error(`Failed to fetch ${basePath}: `, err)
+                  throw err;      
+            }
         },
         get: async (id:number) : Promise<TDto>=> {
             const res = await api.get<TDto>(`${basePath}/${id}`);
@@ -22,5 +28,9 @@ export function createCrudService<TDto, TCreateDto, TUpdateDto>(basePath : strin
         delete : async (id:number): Promise<void> => {
             await api.delete(`${basePath}/${id}`);
         },
+        patch : async(id:number, dto:Partial<TUpdateDto>) : Promise<TDto> =>{
+            const res = await api.patch<TDto>(`${basePath}/${id}`,dto);
+            return res.data;
+        }
     };
 }
