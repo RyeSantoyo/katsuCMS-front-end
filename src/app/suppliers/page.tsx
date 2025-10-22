@@ -5,7 +5,7 @@ import {supplierServices} from "../../services/supplierservice"
 import { SupplierDto } from "@/types/supplier";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table"
 //import { DataTable } from "./data-table";
 import {columns} from "./columns";
 

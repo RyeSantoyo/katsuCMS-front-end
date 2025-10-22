@@ -5,7 +5,7 @@ import {categoryServices} from "../../services/categoryservice"
 import { PCategoryDto } from "../../types/category";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
-import { DataTable} from "./data-table";
+import { DataTable } from "@/components/data-table"
 import {columns } from "./columns";
 //import { tree } from "next/dist/build/templates/app-page";
 

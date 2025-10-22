@@ -4,7 +4,7 @@ import {unitServices} from "../../services/unitservice"; //, updateUnit - Remove
 import { UnitDto } from "../../types/unit"; //, UnitCreateDto, UnitUpdateDto - Removed
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table"
 import { columns} from "./columns"; // removed , Unit 
 
 export default function UnitsPage(){

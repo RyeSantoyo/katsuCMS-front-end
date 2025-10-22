@@ -8,7 +8,7 @@ import { unitServices } from "@/services/unitservice";
 import { ProductDto } from "@/types/products";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table"
 import { columns } from "./columns";
 import { PCategoryDto } from "../category/columns";
 import { UnitDto } from "../units/columns";

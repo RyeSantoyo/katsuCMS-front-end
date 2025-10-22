@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { DataTable } from "./data-table";
-// import { DataTable } from "../product/data-table";
+// import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table"
 import { columns } from "./columns"
 import { InventoryStockDto } from "@/types/inventory";
 import { Button } from "@/components/ui/button";

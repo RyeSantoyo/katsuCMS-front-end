@@ -4,7 +4,7 @@ import {storeServices} from "../../services/storeServices"
 import { StoreDto } from "../../types/store";
 import toast from "react-hot-toast";
 import Modal from "@/components/Modal";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table"
 import {columns} from "./columns";
 
 export default function StorePage(){
