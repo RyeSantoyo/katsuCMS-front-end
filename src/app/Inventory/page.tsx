@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { DataTable } from "../product/data-table";
+import { DataTable } from "./data-table";
+// import { DataTable } from "../product/data-table";
 import { columns } from "./columns"
 import { InventoryStockDto } from "@/types/inventory";
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,9 @@ export default function InventoryStockPage() {
         <Button onClick={fetchStocks}>🔄 Refresh</Button>
       </div>
 
-      <DataTable columns={columns({ onDelete: handleDelete, onEdit: handleEdit })} data={stocks} />
+      <div className="container mx-auto py-10">
+        <DataTable columns={columns({ onDelete: handleDelete, onEdit: handleEdit })} data={stocks} />
+      </div>
     </div>
   );
 }
