@@ -98,7 +98,6 @@ export const columns = ({ onDelete, onEdit }:
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem >View Customer</DropdownMenuItem>
-                            <DropdownMenuItem> View Details</DropdownMenuItem>
                             <DropdownMenuItem onClick={()=> onEdit(stocks)}> Edit</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => onDelete(row.original.id, row.original.productName)}> Delete</DropdownMenuItem>
                         </DropdownMenuContent>

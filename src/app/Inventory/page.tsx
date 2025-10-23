@@ -4,15 +4,19 @@ import { useEffect, useState } from "react";
 import { DataTable } from "@/components/data-table"
 import { columns } from "./columns"
 import { InventoryStockDto } from "@/types/inventory";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
+import { Loader, Loader2, PlusCircle, RefreshCcw } from "lucide-react";
 
 export default function InventoryStockPage() {
   const [stocks, setStocks] = useState<InventoryStockDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refresh, startRefresh] = useState(false);
 
   // Fetch data from your backend
   const fetchStocks = async () => {
     try {
+      startRefresh(true);
       const res = await fetch("http://localhost:5058/api/inventorystock");
       const data = await res.json();
       setStocks(data);
@@ -20,6 +24,7 @@ export default function InventoryStockPage() {
       console.error("Failed to fetch stocks:", error);
     } finally {
       setLoading(false);
+      startRefresh(false);
     }
   };
 
@@ -44,19 +49,75 @@ export default function InventoryStockPage() {
   };
 
   if (loading) {
-    return <p className="p-6 text-center text-gray-500">Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-[70vh] text-gray-500">
+        <Loader2 className=" h-6 w-6 animate-spin mr-2" /> Loading Stocks.
+      </div>
+    )
   }
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">📦 Inventory Stocks</h1>
-        <Button onClick={fetchStocks}>🔄 Refresh</Button>
-      </div>
+      <Card>
+        <CardHeader className="flex flex-row justify-between items-center">
+          <div>
+            <CardTitle className="text-2xl font-bold"> 📦 Inventory Stocks </CardTitle>
+            <p className="text-gray-500 text-sm"> Manage and monitor current stock levels.</p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant={"outline"} onClick={(fetchStocks)} disabled={refresh}>
+              {refresh ? (
+                <>
+                  <Loader2 className="animate-spin h-4 w-4 w-4 mr-2" /> Refreshing....
+                </>
+              ) : (
+                <>
+                  <RefreshCcw className="h-4 w-4 mr-2" /> Refresh
+                </>
+              )}
+            </Button>
+            <Button onClick={() => console.log("Manual adding of stock activated",)}>
+              <PlusCircle className="h-4 w-4 mr-2" /> Manually Add Stock
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="py-4">
+            <DataTable
+              columns={columns({ onDelete: handleDelete, onEdit: handleEdit })}
+              data={stocks}
+            />
+          </div>
+        </CardContent>
+        
+      </Card>
+    </div >
+  );
+}
 
+/*      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">📦 Inventory Stocks</h1>
+        <p className="text-gray-500 text-sm">Manage and monitor current stock levels</p>
+
+               <div className="flex gap-2">
+          <Button variant={"outline"} onClick={(fetchStocks)} disabled={refresh}>
+            {refresh ?(
+              <>
+              <Loader2 className="animate-spin h-4 w-4 w-4 mr-2"/> Refreshing....
+              </>
+            ) : (
+              <>
+              <RefreshCcw className="h-4 w-4 mr-2"/> Refresh
+              </>
+            )}
+          </Button>
+          <Button onClick={()=> console.log("Manual adding of stock activated" ,)}>
+            <PlusCircle className="h-4 w-4 mr-2"/> Manually Add Stock
+          </Button>
+        </div>
+      </div>
+      
       <div className="container mx-auto py-10">
         <DataTable columns={columns({ onDelete: handleDelete, onEdit: handleEdit })} data={stocks} />
       </div>
-    </div>
-  );
-}
+       */
