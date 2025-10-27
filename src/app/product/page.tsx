@@ -13,7 +13,7 @@ import { columns } from "./columns";
 import { PCategoryDto } from "../category/columns";
 import { UnitDto } from "../units/columns";
 import { SupplierDto } from "@/types/supplier";
-import SupplierMultiSelect from "./multi-select";
+import SupplierMultiSelect, { CategoryMultiSelect } from "./multi-select";
 
 
 export default function ProductPage() {
@@ -23,7 +23,7 @@ export default function ProductPage() {
     const [newPrice, setNewPrice] = useState(0);
     //const [newStock, setNewStock] = useState(0);
     const [newDescription, setNewDescription] = useState("");
-    const [newCategory, setNewCategory] = useState("");
+    // const [newCategory, setNewCategory] = useState("");
     //const [newSupplier, setNewSupplier] = useState("");
     const [newUnit, setNewUnit] = useState("");
 
@@ -35,7 +35,7 @@ export default function ProductPage() {
     const [units, setUnits] = useState<UnitDto[]>([]);
 
     const [newSuppliers, setNewSuppliers] = useState<{ value: number; label: string }[]>([]);
-
+    const [newCategory, setNewCategory] = useState<{ value: number; label: string }[]>([]);
     useEffect(() => {
         loadProducts();
         loadAllData();
@@ -78,7 +78,7 @@ export default function ProductPage() {
                 //quantity: newStock,
                 description: newDescription,
                 price: newPrice,
-                categoryId: parseInt(newCategory),
+                categoryId: newCategory.map((c) => c.value),
                 unitId: parseInt(newUnit),
                 supplierIds: newSuppliers.map((s) => s.value),
             });
@@ -87,7 +87,7 @@ export default function ProductPage() {
             setNewPrice(0);
             //setNewStock(0);
             setNewDescription("");
-            setNewCategory("");
+            setNewCategory([]);
             setNewUnit("");
             setNewSuppliers([]);
             setShowAddModal(false);
@@ -165,12 +165,17 @@ export default function ProductPage() {
                             <textarea placeholder="Description" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
 
                             {/* Category Dropdown */}
-                            <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
+                            {/* <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
                                 <option value="">Select Category</option>
                                 {categories.map((cat) => (
                                     <option key={cat.id} value={cat.id}>{cat.categoryName}</option>
                                 ))}
-                            </select>
+                            </select> */}
+                            <CategoryMultiSelect
+                                category={categories}
+                                newCategory={newCategory}
+                                setNewCategory={setNewCategory}
+                            />
                             {/* Unit Dropdown */}
 
                             <select value={newUnit} onChange={(e) => setNewUnit(parseInt(e.target.value).toString())} className="w-full p-2 border border-gray-300 rounded">
@@ -192,7 +197,7 @@ export default function ProductPage() {
                 />
                 <Modal
                     isOpen={showEditModal}
-                    title="Edit Supplier Info."
+                    title="Edit Product Details."
                     content={
                         <>
                             <input
@@ -211,17 +216,12 @@ export default function ProductPage() {
                                 newSuppliers={newSuppliers}
                                 setNewSuppliers={setNewSuppliers}
                             />
-                            <input
-                                type="text"
-                                value={editingProduct?.categoryName || ""}
-                                onChange={(e) =>
-                                    setEditingProduct((prev) =>
-                                        prev ? { ...prev, ContactNumber: e.target.value } : null
-                                    )
-                                }
-                                placeholder="ContactNumber"
-                                className="w-full border px-3 py-2 rounded"
+                            <CategoryMultiSelect
+                                category={categories}
+                                newCategory={newCategory}
+                                setNewCategory={setNewCategory}
                             />
+
                         </>
                     }
                     onCancel={() => {

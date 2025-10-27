@@ -18,10 +18,10 @@ export const columns = ({ onDelete, onEdit }:
         onEdit: (stocks: InventoryStockDto) => void;
     }): ColumnDef<InventoryStockDto>[] =>
     [
-        {
-            accessorKey: "id",
-            header: "ID"
-        },
+        // {
+        //     accessorKey: "id",
+        //     header: "ID"
+        // },
         {
             accessorKey: "productCode",
             header: "Product Code"
@@ -54,6 +54,7 @@ export const columns = ({ onDelete, onEdit }:
             accessorKey: "preferredStockLevel",
             header: "Preferred Stock"
         },
+
         // {
         //     accessorKey: "isLowStock",
         //     header: "Low in Stock?"
