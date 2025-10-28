@@ -56,6 +56,11 @@ export default function StockAdjustmentModal({
     } finally {
       setLoading(false);
     }
+
+    setAdjustedQuantity(0);
+    setReason("")
+    setAdjustmentType("");
+
   };
 
   return (

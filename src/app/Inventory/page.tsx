@@ -6,13 +6,15 @@ import { columns } from "./columns"
 import { InventoryStockDto } from "@/types/inventory";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
-import { Loader, Loader2, PlusCircle, RefreshCcw } from "lucide-react";
+import { Loader2, PlusCircle, RefreshCcw } from "lucide-react";
+import StockAdjustmentModal from "./stockadjustmentmodal";
 
 export default function InventoryStockPage() {
   const [stocks, setStocks] = useState<InventoryStockDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [refresh, startRefresh] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedStock, setSelectedStock] = useState<InventoryStockDto | null>(null);
   // Fetch data from your backend
   const fetchStocks = async () => {
     try {
@@ -45,8 +47,15 @@ export default function InventoryStockPage() {
 
   const handleEdit = (stock: InventoryStockDto) => {
     console.log("Edit clicked for:", stock);
+    setSelectedStock(stock);
+    setIsModalOpen(true);
     // TODO: open modal with stock details
   };
+
+  const handleAdjustment = () => {
+    setSelectedStock(null);
+    setIsModalOpen(true)
+  }
 
   if (loading) {
     return (
@@ -76,11 +85,12 @@ export default function InventoryStockPage() {
                 </>
               )}
             </Button>
-            <Button onClick={() => console.log("Manual adding of stock activated",)}>
+            <Button onClick={handleAdjustment}>
               <PlusCircle className="h-4 w-4 mr-2" /> Manually Add Stock
             </Button>
           </div>
         </CardHeader>
+
         <CardContent>
           <div className="py-4">
             <DataTable
@@ -89,8 +99,16 @@ export default function InventoryStockPage() {
             />
           </div>
         </CardContent>
-        
       </Card>
+
+      <StockAdjustmentModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        stockId={selectedStock?.id ?? null}
+        productName={selectedStock?.productName}
+        currentQuantity={selectedStock?.quantity}
+        onAdjustmentSuccess={fetchStocks}
+      />
     </div >
   );
 }
