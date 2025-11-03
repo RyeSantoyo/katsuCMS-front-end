@@ -71,7 +71,7 @@ export default function StockAddModal({ open, onClose, onCreated }: StockAddProp
         }));
         setSelectedSupplier(supplierOptions);
     }, [selectedProduct, quantity]);
-
+ /* ------------------------------------------------------------------------------------------------ */
     const handleSubmit = async () => {
         if (!selectedProduct) {
             toast.error("Please select a product");
@@ -104,5 +104,85 @@ export default function StockAddModal({ open, onClose, onCreated }: StockAddProp
             console.error("Failed to add stock:", error);
             toast.error("Failed to add stock");
         }
-    }
+    } // handle submit
+ // not final will update tomorrow  
+    return (
+        <div>
+            <Dialog open={open} onOpenChange={onClose}>
+                <DialogContent className="sm:max-w-[500px]">
+                    <DialogHeader>
+                        <DialogTitle>Add Stock</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-2">
+                        <div>
+                            <Label htmlFor="product">Product</Label>
+                            {loadingProducts ? (
+                                <p>Loading products...</p>
+                            ) : (
+                                <select
+                                    id="product"
+                                    className="w-full mt-1 p-2 border border-gray-300 rounded"
+                                    value={selectedProductId ?? ""}
+                                    onChange={(e) => setSelectedProductId(Number(e.target.value) || null)}
+                                >
+                                    <option value="">Select a product</option>
+                                    {products.map((product) => (
+                                        <option key={product.id} value={product.id}>
+                                            {product.productName} ({product.productCode})
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+                        <div>
+                            <Label htmlFor="quantity">Quantity</Label>
+                            <Input
+                                id="quantity"
+                                type="number"
+                                className="w-full mt-1"
+                                value={quantity}
+                                onChange={(e) => setQuantity(Number(e.target.value))}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="reorderLevel">Reorder Level</Label>
+                            <Input
+                                id="reorderLevel"
+                                type="number"
+                                className="w-full mt-1"
+                                value={reorderLevel}
+                                onChange={(e) => setReoderLevel(Number(e.target.value))}
+                            />
+                        </div>
+                        <div>
+                            <Label>Suppliers</Label>
+                            {/* <SupplierMultiSelect
+                                suppliers={selectedProduct ? selectedProduct.supplierIds : []}
+                                newSuppliers={selectedSupplier}
+                                setNewSuppliers={setSelectedSupplier}
+                            /> */}
+                        </div>
+                        <div>
+                            <Label htmlFor="inventoryValue">Inventory Value</Label>
+                            <Input
+                                id="inventoryValue"
+                                type="number"
+                                className="w-full mt-1"
+                                value={inventoryValue}
+                                readOnly
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={onClose} disabled={submitting}>Cancel</Button>
+                        <Button onClick={handleSubmit} disabled={submitting}>
+                            {submitting ? "Adding..." : "Add Stock"}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+
+        </div>
+    )
 }
