@@ -20,6 +20,7 @@ export interface InventoryStockCreateDto{
     quantity: number;
     reorderLevel: number;
     preferredStockLevel: number;
+    supplierIds : number[];
 }
 
 export interface InventoryStockUpdateDto extends InventoryStockCreateDto {
