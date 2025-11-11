@@ -67,7 +67,7 @@ export default function StockAdjustmentModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[450px]">
         <DialogHeader>
-          <DialogTitle>Adjust Stock</DialogTitle>
+          <DialogTitle>Edit Stock</DialogTitle>
         </DialogHeader>
 
         <div className="grid gap-4 py-2">

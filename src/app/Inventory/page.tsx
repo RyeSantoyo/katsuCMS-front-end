@@ -8,12 +8,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Loader2, PlusCircle, RefreshCcw } from "lucide-react";
 import StockAdjustmentModal from "./stockadjustmentmodal";
+import StockAddModal from "./addstockmodal";
 
 export default function InventoryStockPage() {
   const [stocks, setStocks] = useState<InventoryStockDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [refresh, startRefresh] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [addStockOpen, setAddStockOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState<InventoryStockDto | null>(null);
   // Fetch data from your backend
   const fetchStocks = async () => {
@@ -52,10 +54,15 @@ export default function InventoryStockPage() {
     // TODO: open modal with stock details
   };
 
-  const handleAdjustment = () => {
-    setSelectedStock(null);
-    setIsModalOpen(true)
+  // const handleAdjustment = () => {
+  //   setSelectedStock(null);
+  //   setIsModalOpen(true)
+  // }
+
+  const handleAddStock = () =>{
+    setAddStockOpen(true);
   }
+
 
   if (loading) {
     return (
@@ -85,7 +92,7 @@ export default function InventoryStockPage() {
                 </>
               )}
             </Button>
-            <Button onClick={handleAdjustment}>
+            <Button onClick={handleAddStock}>
               <PlusCircle className="h-4 w-4 mr-2" /> Manually Add Stock
             </Button>
           </div>
@@ -109,6 +116,13 @@ export default function InventoryStockPage() {
         currentQuantity={selectedStock?.quantity}
         onAdjustmentSuccess={fetchStocks}
       />
+
+      <StockAddModal
+        open={addStockOpen}
+        onClose={() => setAddStockOpen(false)}
+        onAddSuccess={fetchStocks}
+      />
+
     </div >
   );
 }
