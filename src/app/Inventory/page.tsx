@@ -59,7 +59,24 @@ export default function InventoryStockPage() {
   //   setIsModalOpen(true)
   // }
 
-  const handleAddStock = () =>{
+  const fetchAdjustments = async () => {
+    try {
+      const res = await fetch("http://localhost:5058/api/stockadjustments");
+      const data = await res.json();
+      console.log("Fetched adjustments:", data);
+    } catch (error) {
+      console.error("Failed to fetch adjustments:", error);
+    }
+    finally {
+      setLoading(false);
+      startRefresh(false);
+    }
+  }
+    useEffect(() => {
+    fetchAdjustments();
+  }, []);
+
+  const handleAddStock = () => {
     setAddStockOpen(true);
   }
 

@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InventoryStockDto } from "@/types/inventory";
+import { StockAdjustmentDto } from "@/types/stockadjustment";
 import {
     DropdownMenu,
     DropdownMenuContent,
