@@ -14,6 +14,7 @@ import { PCategoryDto } from "../category/columns";
 import { UnitDto } from "../units/columns";
 import { SupplierDto } from "@/types/supplier";
 import SupplierMultiSelect, { CategoryMultiSelect } from "./multi-select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 
 export default function ProductPage() {
@@ -134,107 +135,130 @@ export default function ProductPage() {
             toast.error("Failed to update product");
         }
     }
-
     return (
         <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
-            <h1 className="text-2xl font-bold mb-4">Products</h1>
-            <div className="flex gap-2 mb-4 text-black">
-                <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-                    onClick={() => setShowAddModal(true)}
-                >
-                    Add Product
-                </button>
-                <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} data={products} />
-
-                <Modal
-                    isOpen={showAddModal}
-                    onConfirm={handleAdd}
-                    onCancel={() => setShowAddModal(false)}
-                    title="Add Product"
-
-                    content={
-                        <div className="space-y-4">
-                            <label>Product Code</label>
-                            <input type="text" placeholder="Product Code" value={newProductCode} onChange={(e) => setNewProductCode(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
-                            <label>Product Name</label>
-                            <input type="text" placeholder="Product Name" value={newProductName} onChange={(e) => setNewProductName(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
-                            <label>Price</label>
-                            <input type="number" placeholder="Price" value={newPrice} onChange={(e) => setNewPrice(parseFloat(e.target.value))} className="w-full p-2 border border-gray-300 rounded" />
-                            {/* <input type="number" placeholder="Stock" value={newStock} onChange ={(e) => setNewStock(parseInt(e.target.value))} className="w-full p-2 border border-gray-300 rounded" /> */}
-                            <textarea placeholder="Description" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
-
-                            {/* Category Dropdown */}
-                            {/* <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
-                                <option value="">Select Category</option>
-                                {categories.map((cat) => (
-                                    <option key={cat.id} value={cat.id}>{cat.categoryName}</option>
-                                ))}
-                            </select> */}
-                            <CategoryMultiSelect
-                                category={categories}
-                                newCategory={newCategory}
-                                setNewCategory={setNewCategory}
-                            />
-                            {/* Unit Dropdown */}
-
-                            <select value={newUnit} onChange={(e) => setNewUnit(parseInt(e.target.value).toString())} className="w-full p-2 border border-gray-300 rounded">
-                                <option value="">Select Unit</option>
-                                {units.map((unit) => (
-                                    <option key={unit.id} value={unit.id}>{unit.unitName}</option>
-                                ))}
-                            </select>
-
-                            {/* Supplier Dropdown */}
-                            <SupplierMultiSelect
-                                suppliers={suppliers}
-                                newSuppliers={newSuppliers}
-                                setNewSuppliers={setNewSuppliers}
-                            />
-
-                        </div>
-                    }
-                />
-                <Modal
-                    isOpen={showEditModal}
-                    title="Edit Product Details."
-                    content={
-                        <>
-                            <input
-                                type="text"
-                                value={editingProduct?.productName || ""}
-                                onChange={(e) =>
-                                    setEditingProduct((prev) =>
-                                        prev ? { ...prev, supplierName: e.target.value } : null
-                                    )
-                                }
-                                placeholder="Supplier Name"
-                                className="w-full border px-3 py-2 rounded"
-                            />
-                            <SupplierMultiSelect
-                                suppliers={suppliers}
-                                newSuppliers={newSuppliers}
-                                setNewSuppliers={setNewSuppliers}
-                            />
-                            <CategoryMultiSelect
-                                category={categories}
-                                newCategory={newCategory}
-                                setNewCategory={setNewCategory}
-                            />
-
-                        </>
-                    }
-                    onCancel={() => {
-                        setNewProductName("");
-                        setNewSuppliers([]);
-                        setShowEditModal(false);
-                    }}
-
-                    onConfirm={handleUpdate}
-                    confirmText="Save"
-                    confirmColor="bg-blue-600"
-                />
-            </div>
+            <Card>
+                <CardHeader className="flex flex-row justify-between items-center">
+                    <div>
+                        <CardTitle className="text-2xl font-bold">Products</CardTitle>
+                        <p className="text-gray-500 text-sm"> Manage and monitor current stock levels.</p>
+                    </div>
+                    <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                        onClick={() => setShowAddModal(true)}
+                    >
+                        Add Product
+                    </button>
+                </CardHeader>
+                <CardContent>
+                    <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} data={products} />
+                </CardContent>
+            </Card>
+            
         </div>
     )
+    //#region 
+    // return (
+    //     <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
+    //         <h1 className="text-2xl font-bold mb-4">Products</h1>
+    //         <div className="flex gap-2 mb-4 text-black">
+    //             <button
+    //                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+    //                 onClick={() => setShowAddModal(true)}
+    //             >
+    //                 Add Product
+    //             </button>
+    //             <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} data={products} />
+
+    //             <Modal
+    //                 isOpen={showAddModal}
+    //                 onConfirm={handleAdd}
+    //                 onCancel={() => setShowAddModal(false)}
+    //                 title="Add Product"
+
+    //                 content={
+    //                     <div className="space-y-4">
+    //                         <label>Product Code</label>
+    //                         <input type="text" placeholder="Product Code" value={newProductCode} onChange={(e) => setNewProductCode(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
+    //                         <label>Product Name</label>
+    //                         <input type="text" placeholder="Product Name" value={newProductName} onChange={(e) => setNewProductName(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
+    //                         <label>Price</label>
+    //                         <input type="number" placeholder="Price" value={newPrice} onChange={(e) => setNewPrice(parseFloat(e.target.value))} className="w-full p-2 border border-gray-300 rounded" />
+    //                         {/* <input type="number" placeholder="Stock" value={newStock} onChange ={(e) => setNewStock(parseInt(e.target.value))} className="w-full p-2 border border-gray-300 rounded" /> */}
+    //                         <textarea placeholder="Description" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} className="w-full p-2 border border-gray-300 rounded" />
+
+    //                         {/* Category Dropdown */}
+    //                         {/* <select value={newCategory} onChange={(e) => setNewCategory(e.target.value)} className="w-full p-2 border border-gray-300 rounded">
+    //                             <option value="">Select Category</option>
+    //                             {categories.map((cat) => (
+    //                                 <option key={cat.id} value={cat.id}>{cat.categoryName}</option>
+    //                             ))}
+    //                         </select> */}
+    //                         <CategoryMultiSelect
+    //                             category={categories}
+    //                             newCategory={newCategory}
+    //                             setNewCategory={setNewCategory}
+    //                         />
+    //                         {/* Unit Dropdown */}
+
+    //                         <select value={newUnit} onChange={(e) => setNewUnit(parseInt(e.target.value).toString())} className="w-full p-2 border border-gray-300 rounded">
+    //                             <option value="">Select Unit</option>
+    //                             {units.map((unit) => (
+    //                                 <option key={unit.id} value={unit.id}>{unit.unitName}</option>
+    //                             ))}
+    //                         </select>
+
+    //                         {/* Supplier Dropdown */}
+    //                         <SupplierMultiSelect
+    //                             suppliers={suppliers}
+    //                             newSuppliers={newSuppliers}
+    //                             setNewSuppliers={setNewSuppliers}
+    //                         />
+
+    //                     </div>
+    //                 }
+    //             />
+    //             <Modal
+    //                 isOpen={showEditModal}
+    //                 title="Edit Product Details."
+    //                 content={
+    //                     <>
+    //                         <input
+    //                             type="text"
+    //                             value={editingProduct?.productName || ""}
+    //                             onChange={(e) =>
+    //                                 setEditingProduct((prev) =>
+    //                                     prev ? { ...prev, supplierName: e.target.value } : null
+    //                                 )
+    //                             }
+    //                             placeholder="Supplier Name"
+    //                             className="w-full border px-3 py-2 rounded"
+    //                         />
+    //                         <SupplierMultiSelect
+    //                             suppliers={suppliers}
+    //                             newSuppliers={newSuppliers}
+    //                             setNewSuppliers={setNewSuppliers}
+    //                         />
+    //                         <CategoryMultiSelect
+    //                             category={categories}
+    //                             newCategory={newCategory}
+    //                             setNewCategory={setNewCategory}
+    //                         />
+
+    //                     </>
+    //                 }
+    //                 onCancel={() => {
+    //                     setNewProductName("");
+    //                     setNewSuppliers([]);
+    //                     setShowEditModal(false);
+    //                 }}
+
+    //                 onConfirm={handleUpdate}
+    //                 confirmText="Save"
+    //                 confirmColor="bg-blue-600"
+    //             />
+    //         </div>
+    //     </div>
+    // )
+    //#endregion
 }
