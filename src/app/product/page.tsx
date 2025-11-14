@@ -7,14 +7,15 @@ import { unitServices } from "@/services/unitservice";
 //import {createProduct, updateProduct, deleteProduct, getProducts} from "../../services/productservice"
 import { ProductDto } from "@/types/products";
 import toast from "react-hot-toast";
-import Modal from "@/components/Modal";
+// import Modal from "@/components/Modal";
 import { DataTable } from "@/components/data-table"
 import { columns } from "./columns";
 import { PCategoryDto } from "../category/columns";
 import { UnitDto } from "../units/columns";
 import { SupplierDto } from "@/types/supplier";
-import SupplierMultiSelect, { CategoryMultiSelect } from "./multi-select";
+// import SupplierMultiSelect, { CategoryMultiSelect } from "./multi-select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import AddProductModal from "./addproductmodal";
 
 
 export default function ProductPage() {
@@ -38,19 +39,19 @@ export default function ProductPage() {
     const [newSuppliers, setNewSuppliers] = useState<{ value: number; label: string }[]>([]);
     const [newCategory, setNewCategory] = useState<{ value: number; label: string }[]>([]);
     useEffect(() => {
-        loadProducts();
+        //loadProducts();
         loadAllData();
     }, []);
 
-    async function loadProducts() {
-        try {
-            const data = await productServices.getAll();
-            setProducts(data);
-        } catch (error) {
-            console.error("Failed to load products", error);
-            toast.error("Failed to load products");
-        }
-    }
+    // async function loadProducts() {
+    //     try {
+    //         const data = await productServices.getAll();
+    //         setProducts(data);
+    //     } catch (error) {
+    //         console.error("Failed to load products", error);
+    //         toast.error("Failed to load products");
+    //     }
+    // }
     async function loadAllData() {
         try {
             const [prodData, catData, supData, unitData] = await Promise.all([
@@ -154,9 +155,14 @@ export default function ProductPage() {
                     <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete })} data={products} />
                 </CardContent>
             </Card>
-            
+
+            <AddProductModal
+                isOpen={showAddModal}
+                onClose={() => setShowAddModal(false)}
+            />
         </div>
     )
+    
     //#region 
     // return (
     //     <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
