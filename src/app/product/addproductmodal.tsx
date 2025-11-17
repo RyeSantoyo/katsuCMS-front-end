@@ -26,6 +26,7 @@ interface AddProductModalProps {
 }
 
 export default function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [products, setProducts] = useState<ProductDto[]>([]);
     const [categories, setCategories] = useState<PCategoryDto[]>([]);
     const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);

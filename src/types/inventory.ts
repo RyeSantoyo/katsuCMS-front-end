@@ -15,14 +15,13 @@ export interface InventoryStockDto{
     supplierNames : string[];
 }
 
-export interface InventoryStockCreateDto{
-    productId : number;
-    unitId : number;
+export interface InventoryStockCreateDto {
+    productId: number;
+    unitId: number;
     quantity: number;
     reorderLevel: number;
     preferredStockLevel: number;
-    supplierId: number[];
-    supplierIds : number[];
+    supplierIds: number[];   // MUST be plural
 }
 
 export interface InventoryStockUpdateDto extends InventoryStockCreateDto {

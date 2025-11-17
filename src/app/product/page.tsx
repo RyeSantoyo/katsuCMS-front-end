@@ -30,10 +30,14 @@ export default function ProductPage() {
     const [newUnit, setNewUnit] = useState("");
 
     const [showAddModal, setShowAddModal] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState<ProductDto | null>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [categories, setCategories] = useState<PCategoryDto[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [units, setUnits] = useState<UnitDto[]>([]);
 
     const [newSuppliers, setNewSuppliers] = useState<{ value: number; label: string }[]>([]);
@@ -69,7 +73,7 @@ export default function ProductPage() {
             toast.error("Failed to load data");
         }
     }
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async function handleAdd() {
         console.log("Add button clicked");
 
@@ -123,6 +127,7 @@ export default function ProductPage() {
         setEditingProduct(product)
         setShowEditModal(true);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async function handleUpdate() {
         if (!editingProduct) return;
         try {
@@ -162,7 +167,7 @@ export default function ProductPage() {
             />
         </div>
     )
-    
+
     //#region 
     // return (
     //     <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">

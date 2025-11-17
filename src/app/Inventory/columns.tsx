@@ -75,7 +75,7 @@ export const columns = ({ onDelete, onEdit }:
         },
         {
             accessorKey: "lastUpdated",
-            header: "Latest Update"
+            header: "Date Created"
         },
         {
             id: "action",

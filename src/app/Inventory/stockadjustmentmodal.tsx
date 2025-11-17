@@ -44,7 +44,8 @@ export default function StockAdjustmentModal({
         inventoryStockId: stockId,
         adjustmentType,
         adjustedQuantity,
-        reason,
+        reason
+
       });
 
       toast.success(`Stock ${adjustmentType.toLowerCase()}ed successfully.`);
@@ -113,6 +114,12 @@ export default function StockAdjustmentModal({
               onChange={(e) => setReason(e.target.value)}
             />
           </div>
+
+          <div className="space-y-2">
+            <Label>Latest Update</Label>
+            <Input readOnly disabled value={new Date().toLocaleString()} />
+          </div>
+
         </div>
 
         <DialogFooter>
