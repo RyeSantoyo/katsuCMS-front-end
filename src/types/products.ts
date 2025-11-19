@@ -5,7 +5,7 @@ export interface ProductDto{
     //quantity : number;
     description : string;
     price : number;
-    categoryId : number[];
+    categoryId : number;
     categoryName : string;
     unitId : number;
     unitName : string;
@@ -19,7 +19,7 @@ export interface ProductCreateDto{
     //quantity: number;
     description: string;
     price: number;
-    categoryId: number[];
+    categoryId: number;
     unitId: number;
     supplierIds: number[];
 }

@@ -43,7 +43,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
         productName: "",
         description: "",
         price: 0,
-        categoryId: [] as number[],
+        categoryId: 0,
         unitId: 0,
         supplierIds: [] as number[],
     });
@@ -53,7 +53,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
         productName: "",
         description: "",
         price: 0,
-        categoryId: [] as number[],
+        categoryId: 0,
         unitId: 0,
         supplierIds: [] as number[],
     }
