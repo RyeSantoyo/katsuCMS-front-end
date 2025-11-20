@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "react-hot-toast";
 import { ProductDto } from "@/types/products";
-import SupplierMultiSelect, { CategoryMultiSelect } from "../product/multi-select";
+//import SupplierMultiSelect, { CategorySelect } from "../product/multi-select";
+import SupplierMultiSelect from "../product/multi-select";
 import { PCategoryDto } from "@/types/category";
 import { SupplierDto } from "@/types/supplier";
 import { UnitDto } from "@/types/unit";
@@ -26,7 +27,7 @@ interface AddProductModalProps {
 }
 
 export default function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [products, setProducts] = useState<ProductDto[]>([]);
     const [categories, setCategories] = useState<PCategoryDto[]>([]);
     const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);
@@ -36,7 +37,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
     // const [showEditModal, setShowEditModal] = useState(false);
     // const [editingProduct, setEditingProduct] = useState<ProductDto | null>(null);
     const [newSuppliers, setNewSuppliers] = useState<{ value: number; label: string }[]>([]);
-    const [newCategory, setNewCategory] = useState<{ value: number; label: string }[]>([]);
+    //const [newCategory, setNewCategory] = useState<{ value: number; label: string }[]>([]);
 
     const [form, setForm] = useState({
         productCode: "",
@@ -220,11 +221,18 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="category">Category</Label>
-                                <CategoryMultiSelect
-                                    category={categories}
-                                    newCategory={newCategory}
-                                    setNewCategory={setNewCategory}
-                                />
+                                <Select onValueChange={(value) => updateForm("categoryId", parseInt(value, 10) || 0)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select Category" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {categories.map((cat) => (
+                                            <SelectItem key={cat.id} value={cat.id.toString()}>
+                                                {cat.categoryName}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="suppliers">Suppliers</Label>
@@ -232,6 +240,8 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                                     suppliers={suppliers}
                                     newSuppliers={newSuppliers}
                                     setNewSuppliers={setNewSuppliers}
+                                    setForm={setForm}
+                                    
                                 />
                             </div>
                         </div>

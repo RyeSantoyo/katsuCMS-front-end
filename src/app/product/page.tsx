@@ -16,7 +16,7 @@ import { SupplierDto } from "@/types/supplier";
 // import SupplierMultiSelect, { CategoryMultiSelect } from "./multi-select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import AddProductModal from "./addproductmodal";
-import { parse } from "path";
+//import { parse } from "path";
 
 
 export default function ProductPage() {

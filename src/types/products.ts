@@ -26,3 +26,20 @@ export interface ProductCreateDto{
 export interface ProductUpdateDto extends ProductCreateDto {
     id: number
 }
+
+export interface SupplierOption {
+  value: number;
+  label: string;
+}
+
+export interface ProductForm {
+  productCode: string;
+  productName: string;
+  description: string;
+  price: number;
+  categoryId: number;
+  unitId: number;
+  supplierIds: number[];
+  supplierNames?: string[];
+}
+
