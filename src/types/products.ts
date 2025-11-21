@@ -40,6 +40,6 @@ export interface ProductForm {
   categoryId: number;
   unitId: number;
   supplierIds: number[];
-  supplierNames?: string[];
+  supplierNames: string[];
 }
 

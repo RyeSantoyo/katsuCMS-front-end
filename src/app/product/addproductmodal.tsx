@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "react-hot-toast";
-import { ProductDto } from "@/types/products";
+import { ProductDto, ProductForm } from "@/types/products";
 //import SupplierMultiSelect, { CategorySelect } from "../product/multi-select";
 import SupplierMultiSelect from "../product/multi-select";
 import { PCategoryDto } from "@/types/category";
@@ -39,14 +39,15 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
     const [newSuppliers, setNewSuppliers] = useState<{ value: number; label: string }[]>([]);
     //const [newCategory, setNewCategory] = useState<{ value: number; label: string }[]>([]);
 
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<ProductForm>({
         productCode: "",
         productName: "",
         description: "",
         price: 0,
         categoryId: 0,
         unitId: 0,
-        supplierIds: [] as number[],
+        supplierIds: [],
+        supplierNames: [],
     });
 
     const inititialFormState = {
@@ -57,6 +58,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
         categoryId: 0,
         unitId: 0,
         supplierIds: [] as number[],
+        supplierNames: []
     }
 
     const updateForm = (field: string, value: unknown) => {
@@ -114,7 +116,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
             toast.error("Failed misserably");
         }
     }
-
+    //#region 
     // async function handleDelete(id: number, productName: string) {
     //     const confirm = window.confirm(`Are you sure you want to delete ${productName}`)
 
@@ -148,7 +150,7 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
     //         toast.error("Failed to update product");
     //     }
     // }
-
+    //#endregion
     return (
         <div>
             { /* Dialog Components */}
@@ -241,7 +243,6 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
                                     newSuppliers={newSuppliers}
                                     setNewSuppliers={setNewSuppliers}
                                     setForm={setForm}
-                                    
                                 />
                             </div>
                         </div>
