@@ -9,12 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Loader2, PlusCircle, RefreshCcw } from "lucide-react";
 import StockAdjustmentModal from "./stockadjustmentmodal";
 import StockAddModal from "./addstockmodal";
+import ViewStockModal from "./viewstockmodal";
 
 export default function InventoryStockPage() {
   const [stocks, setStocks] = useState<InventoryStockDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [refresh, startRefresh] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false); // New state for ViewStockModal
   const [addStockOpen, setAddStockOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState<InventoryStockDto | null>(null);
   // Fetch data from your backend
@@ -47,12 +49,15 @@ export default function InventoryStockPage() {
     }
   };
 
-  const handleEdit = (stock: InventoryStockDto) => {
-    console.log("Edit clicked for:", stock);
-    setSelectedStock(stock);
-    setIsModalOpen(true);
-    // TODO: open modal with stock details
-  };
+const handleEdit = (stock: InventoryStockDto) => {
+  setSelectedStock(stock);
+  setIsModalOpen(true); // open StockAdjustmentModal
+};
+
+const handleView = (stock: InventoryStockDto) => {
+  setSelectedStock(stock);
+  setIsViewModalOpen(true); // open ViewStockModal
+};
 
   // const handleAdjustment = () => {
   //   setSelectedStock(null);
@@ -72,13 +77,15 @@ export default function InventoryStockPage() {
       startRefresh(false);
     }
   }
-    useEffect(() => {
+  useEffect(() => {
     fetchAdjustments();
   }, []);
 
   const handleAddStock = () => {
     setAddStockOpen(true);
   }
+
+
 
 
   if (loading) {
@@ -118,7 +125,7 @@ export default function InventoryStockPage() {
         <CardContent>
           <div className="py-4">
             <DataTable
-              columns={columns({ onDelete: handleDelete, onEdit: handleEdit })}
+              columns={columns({ onDelete: handleDelete, onEdit: handleEdit, onView: handleView })}
               data={stocks}
             />
           </div>
@@ -139,6 +146,19 @@ export default function InventoryStockPage() {
         onClose={() => setAddStockOpen(false)}
         onAddSuccess={fetchStocks}
       />
+
+      <ViewStockModal
+        open={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        productCode={selectedStock?.productCode}
+        stockId={selectedStock?.id ?? null}
+        productName={selectedStock?.productName}
+        unitName={selectedStock?.unitName}
+        category={selectedStock?.category}
+        currentQuantity={selectedStock?.quantity}
+        inventoryValue={selectedStock?.inventoryValue}
+       // onAdjustmentSuccess={fetchStocks}
+         />
 
     </div >
   );

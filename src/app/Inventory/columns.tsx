@@ -13,10 +13,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export const columns = ({ onDelete, onEdit }:
+export const columns = ({ onDelete, onEdit, onView }:
     {
         onDelete: (id: number, productName: string) => void;
         onEdit: (stocks: InventoryStockDto) => void;
+        onView: (views: InventoryStockDto) => void;
     }): ColumnDef<InventoryStockDto>[] =>
     [
         // {
@@ -94,12 +95,12 @@ export const columns = ({ onDelete, onEdit }:
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(stocks.productCode)}>
-                                Copy Product Code
-                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem >View Customer</DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(stocks.productName)}>
+                                Copy Product Name
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={()=> onView(row.original)} >View Info</DropdownMenuItem>
                             <DropdownMenuItem onClick={()=> onEdit(stocks)}> Edit</DropdownMenuItem>
                             <DropdownMenuItem onClick={() => onDelete(row.original.id, row.original.productName)}> Delete</DropdownMenuItem>
                         </DropdownMenuContent>
