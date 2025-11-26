@@ -1,28 +1,52 @@
-// export interface ProductDto{
-//     id: number;
-//     productCode : string;
-//     productName : string;
-//     //quantity : number;
-//     description : string;
-//     price : number;
-//     categoryId : number[];
-//     categoryName : string;
-//     unitId : number;
-//     unitName : string;
-//     supplierIds : number[];
-//     supplierNames : string[];
-// }
+export interface PurchaseOrderDto{
+    poNumber : string;
+    supplierId : number;
+    orderDate : string;
+    status: PurchaseOrderStatus;
+    totalAmout: number;
+    createdDate : string;
+    updatedAt : string;
+    orderDetails : PurchaseOrderDetailDto;
+}
+export interface PurchaseOrderCreateDto{
+    poNumber: string;
+    supplierId: number;
+    orderDate: string;
+    status: PurchaseOrderStatus;
+    totalAmount: number;
+    purchaseOrderDetails: PurchaseOrderDetailDto[];
+}
+export interface PurchaseOrderUpdateDto extends PurchaseOrderCreateDto{
+    status: PurchaseOrderStatus;
+    updatedAt:string;
+}
+export interface PurchaseOrderResponseDto{
+    poNumber: string;
+    supplierName: string;
+    orderDate: string;
+    status : PurchaseOrderStatus;
+    totalAmount : number;
+    orderDetails: PurchaseOrderDetailResponseDto[];
+}
 
-// export interface ProductCreateDto{
-//     productCode: string;
-//     productName: string;
-//     //quantity: number;
-//     description: string;
-//     price: number;
-//     categoryId: number[];
-//     unitId: number;
-//     supplierIds: number[];
-// }
-// export interface ProductUpdateDto extends ProductCreateDto {
-//     id: number
-// }
+export enum PurchaseOrderStatus{
+    Pending = 0,
+    Approved = 1,
+    Completed = 2,
+    Cancelled = 3
+}
+
+export interface PurchaseOrderDetailDto{
+    productId: number;
+    quantity: number;
+    unitPrice: number;
+    subtotal: number;
+}
+
+export interface PurchaseOrderDetailResponseDto{
+    productName: string;
+    quantity: number;
+    unitPrice: number;
+    subtotal: number;
+    unitName: string;
+}
