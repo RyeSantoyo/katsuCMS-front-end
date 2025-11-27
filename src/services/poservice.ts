@@ -1,6 +1,6 @@
 import { createCrudService } from "./crudServices";
-import { InventoryStockCreateDto, InventoryStockDto,InventoryStockUpdateDto } from "../types/inventory";
+import { PurchaseOrderDto, PurchaseOrderCreateDto, PurchaseOrderUpdateDto } from "@/types/purchaseorder";
 
 export const poServices = 
-createCrudService<InventoryStockDto, InventoryStockCreateDto, InventoryStockUpdateDto>
+createCrudService<PurchaseOrderDto, PurchaseOrderCreateDto, PurchaseOrderUpdateDto>
 ("/purchaseorder");

@@ -3,10 +3,10 @@ export interface PurchaseOrderDto{
     supplierId : number;
     orderDate : string;
     status: PurchaseOrderStatus;
-    totalAmout: number;
+    totalAmount: number;
     createdDate : string;
     updatedAt : string;
-    orderDetails : PurchaseOrderDetailDto;
+    orderDetails : PurchaseOrderDetailDto[];
 }
 export interface PurchaseOrderCreateDto{
     poNumber: string;
@@ -49,4 +49,20 @@ export interface PurchaseOrderDetailResponseDto{
     unitPrice: number;
     subtotal: number;
     unitName: string;
+}
+
+export interface POForm{
+    poNumber: string;
+    supplierId : number | "";
+    oderDate: string;
+    status: PurchaseOrderStatus;
+    totalAmount: number;
+    items: POFormItems[];
+}
+
+export interface POFormItems{
+    productId : number | "";
+    quantity: number;
+    unitPrice: number;
+    subTotal: number;
 }
