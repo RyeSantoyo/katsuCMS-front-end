@@ -54,13 +54,13 @@ export interface PurchaseOrderDetailResponseDto{
 export interface POForm{
     poNumber: string;
     supplierId : number | "";
-    oderDate: string;
+    orderDate: string;
     status: PurchaseOrderStatus;
     totalAmount: number;
     items: POFormItems[];
 }
 
-export interface POFormItems{
+export interface    POFormItems{
     productId : number | "";
     quantity: number;
     unitPrice: number;
