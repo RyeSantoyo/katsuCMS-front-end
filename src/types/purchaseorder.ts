@@ -1,4 +1,5 @@
 export interface PurchaseOrderDto{
+    id: number;
     poNumber : string;
     supplierId : number;
     orderDate : string;
