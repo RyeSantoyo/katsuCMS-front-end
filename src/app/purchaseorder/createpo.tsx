@@ -3,6 +3,8 @@
 import { poServices } from "@/services/poservice";
 import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderStatus } from "@/types/purchaseorder";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import CreatePOModal from "./createpomodal";
 
 export const initialPOForm =
 {
@@ -14,40 +16,59 @@ export const initialPOForm =
     items: [] as POFormItems[],
 };
 
-export default function CreatePO() {
-    const [form, setForm] = useState<POForm>(initialPOForm);
+export default function CreatePOPage() {
     const [open, setOpen] = useState(false);
+    const [form, setForm] = useState<POForm>(initialPOForm);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [suppliers, setSuppliers] = useState<{ id: number; name: string }[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [products, setProducts] = useState<{ id: number; name: string; unitName: string }[]>([]);
 
-    function handleSubmit() {
+    const handleSubmit = async () => {
         const dto: PurchaseOrderCreateDto = {
             poNumber: form.poNumber,
-            supplierId: Number(form.supplierId),
+            supplierId: typeof form.supplierId === "number" ? form.supplierId : Number(form.supplierId),
             orderDate: form.orderDate,
             status: form.status,
             totalAmount: form.totalAmount,
             purchaseOrderDetails: form.items.map(i => ({
-                productId: Number(i.productId),
+                productId: typeof i.productId === "number" ? i.productId : Number(i.productId),
                 quantity: i.quantity,
                 unitPrice: i.unitPrice,
                 subtotal: i.subTotal
-
             }))
         };
-
-        poServices.create(dto)
-            .then(() => alert("Po created"))
-            .catch(() => alert("Error"))
-    }
+/*
+useEffect(() => {
+  // TODO: Replace with your real API calls
+  poServices.getSuppliers().then(setSuppliers);
+  poServices.getProducts().then(setProducts);
+}, []
+*/
+        try {
+            await poServices.create(dto);
+            toast.success("Purchase Order created!");
+            setOpen(false);
+            setForm(initialPOForm);
+        } catch (error) {
+            toast.error("Failed to create PO");
+            console.error(error);
+        }
+    };
     return (
         <>
-        <button onClick ={() => setOpen(true)}> Create PO</button>
-{/*         
-        <CreatePO
-            open = {open}
-            setOpen = {setOpen}
-            form = {form}
-            setForm = {setForm} /> */}
-        </>
+            <button onClick={() => setOpen(true)}>Create PO</button>
 
-    )
+            <CreatePOModal
+                open={open}
+                onClose={() => setOpen(false)}
+                setOpen={setOpen}
+                form={form}
+                setForm={setForm}
+                onSubmitted={handleSubmit}
+                suppliers={suppliers}
+                products={products}
+            />
+        </>
+    );
 }

@@ -10,9 +10,15 @@ import { toast } from "react-hot-toast";
 import { Label } from "@radix-ui/react-select";
 
 interface CreatePOModalProps {
-    open: boolean;
+    open : boolean;
     onClose: () => void;
     onCreated?: () => void;
+    setOpen : (value : boolean) => void;
+    form : POForm;
+    setForm : React.Dispatch<React.SetStateAction<POForm>>;
+    onSubmitted?: () => void;
+    suppliers: {id : number; name: string}[];
+    products: {id: number; name: string; unitName: string}[];
 }
 
 export default function CreatePOModal({ open, onClose, onCreated }: CreatePOModalProps) {
