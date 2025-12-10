@@ -10,19 +10,29 @@ import { toast } from "react-hot-toast";
 import { Label } from "@radix-ui/react-select";
 
 interface CreatePOModalProps {
-    open : boolean;
+    open: boolean;
     onClose: () => void;
     onCreated?: () => void;
-    setOpen : (value : boolean) => void;
-    form : POForm;
-    setForm : React.Dispatch<React.SetStateAction<POForm>>;
+    setOpen: (value: boolean) => void;
+    form: POForm;
+    setForm: React.Dispatch<React.SetStateAction<POForm>>;
     onSubmitted?: () => void;
-    suppliers: {id : number; name: string}[];
-    products: {id: number; name: string; unitName: string}[];
+    suppliers: { id: number; name: string }[];
+    products: { id: number; name: string; unitName: string }[];
 }
 
-export default function CreatePOModal({ open, onClose, onCreated }: CreatePOModalProps) {
-    const [form, setForm] = useState<POForm>(initialPOForm);
+export default function CreatePOModal({
+    open,
+    onClose,
+    onCreated,
+    setOpen,
+    form,
+    setForm,
+    onSubmitted,
+    suppliers,
+    products,
+}: CreatePOModalProps) {
+    // const [form, setForm] = useState<POForm>(initialPOForm);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async () => {
@@ -57,7 +67,7 @@ export default function CreatePOModal({ open, onClose, onCreated }: CreatePOModa
             setIsSubmitting(false);
         }
     };
-    
+
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent>
@@ -78,11 +88,22 @@ export default function CreatePOModal({ open, onClose, onCreated }: CreatePOModa
                     </div>
                     <div>
                         <Label>Supplier ID</Label>
-                        <input
+                        {/* <input
                             type="number"
                             value={form.supplierId}
                             onChange={e => setForm(prev => ({ ...prev, supplierId: Number(e.target.value) }))}
-                            className="w-full border rounded px-2 py-1" />
+                            className="w-full border rounded px-2 py-1" /> */}
+                        <select
+                            value={form.supplierId}
+                            onChange={e => setForm(prev => ({ ...prev, supplierId: Number(e.target.value) }))}
+                            className="w-full border rounded px-2 py-1"
+                        >
+                            <option value={0}>Select Supplier</option>
+                            {suppliers.map(s => (
+                                <option key={s.id} value={s.id}>{s.name}</option>
+                            ))}
+                        </select>
+
                     </div>
                     <div>
                         <Label>Order Date</Label>
@@ -135,7 +156,7 @@ export default function CreatePOModal({ open, onClose, onCreated }: CreatePOModa
                 </div>
                 <DialogFooter className="pt-4">
                     <Button variant="secondary" onClick={onClose} disabled={isSubmitting}>Cancel</Button>
-                    <Button onClick={handleSubmit} disabled={isSubmitting}>
+                    <Button onClick={onSubmitted} disabled={isSubmitting}>
                         {isSubmitting ? "Creating..." : "Create"}
                     </Button>
                 </DialogFooter>

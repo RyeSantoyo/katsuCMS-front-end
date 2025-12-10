@@ -38,13 +38,7 @@ export default function CreatePOPage() {
                 subtotal: i.subTotal
             }))
         };
-/*
-useEffect(() => {
-  // TODO: Replace with your real API calls
-  poServices.getSuppliers().then(setSuppliers);
-  poServices.getProducts().then(setProducts);
-}, []
-*/
+
         try {
             await poServices.create(dto);
             toast.success("Purchase Order created!");
