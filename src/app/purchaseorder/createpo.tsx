@@ -2,9 +2,11 @@
 
 import { poServices } from "@/services/poservice";
 import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderStatus } from "@/types/purchaseorder";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import CreatePOModal from "./createpomodal";
+import { supplierServices } from "@/services/supplierservice";
+import { productServices } from "@/services/productservice";
 
 export const initialPOForm =
 {
@@ -17,12 +19,37 @@ export const initialPOForm =
 };
 
 export default function CreatePOPage() {
+
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState<POForm>(initialPOForm);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const [suppliers, setSuppliers] = useState<{ id: number; name: string }[]>([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const [products, setProducts] = useState<{ id: number; name: string; unitName: string }[]>([]);
+
+    useEffect(() => {
+
+        const loadDropDown = async () => {
+            try {
+                const supplierData = await supplierServices.getAll();
+                const productData = await productServices.getAll();
+
+                setSuppliers(
+                    supplierData.map(s => ({ id: s.id, name: s.supplierName }))
+                );
+                setProducts(
+                    productData.map(p => ({ id: p.id, name: p.productName, unitName: p.unitName }))
+                );
+            } 
+            catch (error) {
+                console.error("Error loading dropdown data:", error);
+                toast.error("Failed to load suppliers or products");
+            }
+        }
+        loadDropDown();
+
+    }, []);
+
 
     const handleSubmit = async () => {
         const dto: PurchaseOrderCreateDto = {
@@ -48,6 +75,7 @@ export default function CreatePOPage() {
             toast.error("Failed to create PO");
             console.error(error);
         }
+
     };
     return (
         <>
