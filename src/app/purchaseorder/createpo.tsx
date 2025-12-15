@@ -50,7 +50,6 @@ export default function CreatePOPage() {
 
     }, []);
 
-
     const handleSubmit = async () => {
         const dto: PurchaseOrderCreateDto = {
             poNumber: form.poNumber,
@@ -90,6 +89,8 @@ export default function CreatePOPage() {
                 onSubmitted={handleSubmit}
                 suppliers={suppliers}
                 products={products}
+                setSuppliers={setSuppliers}
+                setProducts={setProducts}
             />
         </>
     );
