@@ -69,7 +69,7 @@ export default function CreatePOPage() {
             await poServices.create(dto);
             toast.success("Purchase Order created!");
             setOpen(false);
-            setForm(initialPOForm);
+            //setForm(initialPOForm);
         } catch (error) {
             toast.error("Failed to create PO");
             console.error(error);
