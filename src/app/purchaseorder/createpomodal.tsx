@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 import { POForm, /*POFormItems,*/ PurchaseOrderCreateDto, PurchaseOrderStatus } from "@/types/purchaseorder";
 import { poServices } from "@/services/poservice";
-import { initialPOForm } from "./createpo";
+import { initialPOForm } from "./page";
 import { toast } from "react-hot-toast";
 import { Label, Select } from "@radix-ui/react-select";
 import { Input } from "@/components/ui/input";
@@ -102,7 +102,7 @@ export default function CreatePOModal({
                 </DialogHeader>
                 <div className="grid grid-cols-2 gap-4 py-4">
                     <div>
-                        <Label>PO Number</Label>
+                        <label>PO Number</label>
                         <input
                             //type="text"
                             value={form.poNumber}
@@ -111,16 +111,17 @@ export default function CreatePOModal({
                             disabled />
                     </div>
                     <div>
-                        <Label>Supplier ID</Label>
-                        {/* <input
+                        <label>Supplier ID</label>
+                        { <input
                             type="number"
                             value={form.supplierId}
                             onChange={e => setForm(prev => ({ ...prev, supplierId: Number(e.target.value) }))}
-                            className="w-full border rounded px-2 py-1" /> */}
+                            className="w-full border rounded px-2 py-1"
+                            readOnly/> }
                     </div>
                     {/*date*/}
                     <div>
-                        <Label>Order Date</Label>
+                        <label>Order Date</label>
                         <Input
                             type="date"
                             value={form.orderDate}
@@ -128,11 +129,11 @@ export default function CreatePOModal({
                     </div>
                     {/*Supplier */}
                     <div>
-                        <Label>Supplier</Label>
+                        <label>Supplier</label>
                         <select
                             className="w-full border rounded px-2 py-1"
                             value={form.supplierId}
-                            onChange={value => setForm(prev => ({ ...prev, supplierId: Number(value) }))}>
+                            onChange={e => setForm(prev => ({ ...prev, supplierId: Number(e.target.value) }))}>
                             <option value="">Select Supplier</option>
                             {suppliers.map(s => (
                                 <option key={s.id} value={s.id}>{s.name}</option>
@@ -145,7 +146,7 @@ export default function CreatePOModal({
                 </div>
 
                 <div>
-                    <Label>Total Amount</Label>
+                    <label>Total Amount</label>
                     <input
                         type="number"
                         value={form.totalAmount}
