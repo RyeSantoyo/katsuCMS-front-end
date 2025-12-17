@@ -15,10 +15,10 @@ export const columns =({onDelete, onEdit}:{
                         onDelete: (id: number, supplierName:string) => void;
                         onEdit : (id:SupplierDto) => void;
                         }): ColumnDef<SupplierDto>[]=>[
-{
-    accessorKey: "id",
-    header: "ID"
-},
+// {
+//     accessorKey: "id",
+//     header: "ID"
+// },
 {
     accessorKey: "supplierName",
     header : "Supplier"
@@ -34,6 +34,10 @@ export const columns =({onDelete, onEdit}:{
 {
     accessorKey: "contactNumber",
     header : "Contact"
+},
+{
+    accessorKey: "supplierCode",
+    header : "Supplier Code"
 },
 {
     id: "action",

@@ -139,10 +139,10 @@ export default function CategoryPage(){
 
                             </>
                         }
-                        onCancel={()=>{
+                    onCancel={()=>{
                         setNewcategory("");
-                        setShowAddModal(false);
-                        }}
+                        setShowEditModal(false);
+                    }}
                         onConfirm={handleUpdate}
                         confirmText="Save"
                         confirmColor="bg-blue-600"

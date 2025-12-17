@@ -1,12 +1,18 @@
 "use client";
 
 import { poServices } from "@/services/poservice";
-import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderStatus } from "@/types/purchaseorder";
+import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderDto, PurchaseOrderStatus } from "@/types/purchaseorder";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import CreatePOModal from "./createpomodal";
 import { supplierServices } from "@/services/supplierservice";
 import { productServices } from "@/services/productservice";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTable } from "@/components/data-table";
+// import { DataTable } from "@/components/data-table";
+ import { columns } from "./columns";
+
 
 export const initialPOForm =
 {
@@ -26,6 +32,7 @@ export default function CreatePOPage() {
     const [suppliers, setSuppliers] = useState<{ id: number; name: string }[]>([]);
 
     const [products, setProducts] = useState<{ id: number; name: string; unitName: string }[]>([]);
+    const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderDto[]>([]);
 
     useEffect(() => {
 
@@ -76,9 +83,40 @@ export default function CreatePOPage() {
         }
 
     };
+
+    function handleEdit(po: PurchaseOrderDto): void {
+        throw new Error("Function not implemented.");
+    }
+
+    function handleDelete(id: number, poNumber: string): void {
+        throw new Error("Function not implemented.");
+    }
+
+    function handleView(po: PurchaseOrderDto): void {
+        throw new Error("Function not implemented.");
+    }
+
+    // const handleEdit = (po: PurchaseOrderCreateDto) => {
+    //     // Implement edit functionality
+    // };
+    //     const handleDelete = (id: number, poNumber: string) => {
+    //     // Implement delete functionality
+    // };
     return (
         <>
-            <button onClick={() => setOpen(true)}>Create PO</button>
+        <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
+            <Card>
+                <CardHeader className="flex flex-row justify-between items-center pb-4">
+                    <div>
+                        <CardTitle className="flex items-center gap-2"> Purchase Order </CardTitle>
+                        <p className="text-sm text-muted-foreground"> Manage your purchase orders </p>
+                    </div>
+            <Button onClick={() => setOpen(true)}>Create PO</Button>
+                </CardHeader>
+            </Card>
+            <br/>
+             <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />
+
 
             <CreatePOModal
                 open={open}
@@ -92,6 +130,7 @@ export default function CreatePOPage() {
                 setSuppliers={setSuppliers}
                 setProducts={setProducts}
             />
+            </div>
         </>
     );
 }

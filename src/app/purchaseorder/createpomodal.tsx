@@ -151,7 +151,7 @@ export default function CreatePOModal({
                         type="number"
                         value={form.totalAmount}
                         onChange={e => setForm(prev => ({ ...prev, totalAmount: Number(e.target.value) }))}
-                        className="w-full border rounded px-2 py-1" />
+                        className="w-full border rounded px-2 py-1" readOnly/>
                 </div>
 
                 <div className="mt-6">
