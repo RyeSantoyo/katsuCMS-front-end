@@ -23,7 +23,7 @@ interface CreatePOModalProps {
     onSubmitted: () => void;
     suppliers: { id: number; name: string }[];
     products: { id: number; name: string; unitName: string; price?: number }[];
-    setSuppliers: (value: { id: number; name: string }[]) => void;
+    setSuppliers: (value: { id: number; name: string; supplierCode: string }[]) => void;
     setProducts: (value: { id: number; name: string; unitName: string; price?: number }[]) => void;
 }
 
@@ -57,7 +57,8 @@ export default function CreatePOModal({
             setSuppliers(
                 res.map(s => ({
                     id: s.id,
-                    name: s.supplierName
+                    name: s.supplierName,
+                    supplierCode: s.supplierCode
                 }))
             );
         }
