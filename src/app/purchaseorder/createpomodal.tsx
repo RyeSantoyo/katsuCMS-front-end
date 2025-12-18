@@ -5,7 +5,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, /*DialogClose*/ } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button";
-import { POForm, /*POFormItems,*/ PurchaseOrderCreateDto, PurchaseOrderStatus } from "@/types/purchaseorder";
+import { POForm, POFormItems, /*POFormItems,*/ PurchaseOrderCreateDto, PurchaseOrderStatus } from "@/types/purchaseorder";
 import { poServices } from "@/services/poservice";
 import { initialPOForm } from "./page";
 import { toast } from "react-hot-toast";
@@ -92,6 +92,31 @@ export default function CreatePOModal({
         }
     }
 
+    const addProductRow = () => {
+        setForm(prev => ({
+            ...prev,
+            items: [
+                ...prev.items,
+                {
+                    productId: 0,
+                    productName: "",
+                    unitName: "",
+                    quantity: 0,
+                    unitPrice: 0,
+                    subTotal: 0
+                }
+            ]
+        }));        
+    };
+
+    const computeTotal = (items: POFormItems[]) => {
+        return items.reduce((total, item) => total + item.subTotal, 0);
+    };
+
+    const handleProductChange = (index: number, productId: number)=>{
+        const product = products.find(p => p.id === productId);
+        if(!products) return;
+    }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-3xl">
