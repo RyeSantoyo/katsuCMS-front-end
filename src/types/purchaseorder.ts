@@ -1,50 +1,53 @@
-export interface PurchaseOrderDto{
+export interface PurchaseOrderDto {
     id: number;
-    poNumber : string;
-    supplierId : number;
-    orderDate : string;
-    status: PurchaseOrderStatus;
-    totalAmount: number;
-    createdDate : string;
-    updatedAt : string;
-    orderDetails : PurchaseOrderDetailDto[];
-}
-export interface PurchaseOrderCreateDto{
     poNumber: string;
     supplierId: number;
+    supplierCode: string;
+    orderDate: string;
+    status: PurchaseOrderStatus;
+    totalAmount: number;
+    createdDate: string;
+    updatedAt: string;
+    orderDetails: PurchaseOrderDetailDto[];
+}
+export interface PurchaseOrderCreateDto {
+    poNumber: string;
+    supplierId: number;
+    supplierCode: string;
     orderDate: string;
     status: PurchaseOrderStatus;
     totalAmount: number;
     purchaseOrderDetails: PurchaseOrderDetailDto[];
 }
-export interface PurchaseOrderUpdateDto extends PurchaseOrderCreateDto{
+export interface PurchaseOrderUpdateDto extends PurchaseOrderCreateDto {
     status: PurchaseOrderStatus;
-    updatedAt:string;
+    updatedAt: string;
 }
-export interface PurchaseOrderResponseDto{
+export interface PurchaseOrderResponseDto {
     poNumber: string;
     supplierName: string;
+    supplierCode: string;
     orderDate: string;
-    status : PurchaseOrderStatus;
-    totalAmount : number;
+    status: PurchaseOrderStatus;
+    totalAmount: number;
     orderDetails: PurchaseOrderDetailResponseDto[];
 }
 
-export enum PurchaseOrderStatus{
+export enum PurchaseOrderStatus {
     Pending = 0,
     Approved = 1,
     Completed = 2,
     Cancelled = 3
 }
 
-export interface PurchaseOrderDetailDto{
+export interface PurchaseOrderDetailDto {
     productId: number;
     quantity: number;
     unitPrice: number;
     subtotal: number;
 }
 
-export interface PurchaseOrderDetailResponseDto{
+export interface PurchaseOrderDetailResponseDto {
     productName: string;
     quantity: number;
     unitPrice: number;
@@ -52,17 +55,18 @@ export interface PurchaseOrderDetailResponseDto{
     unitName: string;
 }
 
-export interface POForm{
+export interface POForm {
     poNumber: string;
-    supplierId : number | "";
+    supplierId: number | "";
+    supplierCode: string;
     orderDate: string;
     status: PurchaseOrderStatus;
     totalAmount: number;
     items: POFormItems[];
 }
 
-export interface    POFormItems{
-    productId : number | "";
+export interface POFormItems {
+    productId: number | "";
     quantity: number;
     unitPrice: number;
     subTotal: number;

@@ -18,6 +18,7 @@ export const initialPOForm =
 {
     poNumber: "",
     supplierId: 0,
+    supplierCode: "",
     orderDate: new Date().toISOString().split("T")[0],
     status: PurchaseOrderStatus.Pending,
     totalAmount: 0,
@@ -61,6 +62,7 @@ export default function CreatePOPage() {
         const dto: PurchaseOrderCreateDto = {
             poNumber: form.poNumber,
             supplierId: typeof form.supplierId === "number" ? form.supplierId : Number(form.supplierId),
+            supplierCode: suppliers.find(s => s.id === (typeof form.supplierId === "number" ? form.supplierId : Number(form.supplierId)))?.supplierCode || "",
             orderDate: form.orderDate,
             status: form.status,
             totalAmount: form.totalAmount,
