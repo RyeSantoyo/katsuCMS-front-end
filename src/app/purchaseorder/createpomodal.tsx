@@ -21,7 +21,7 @@ interface CreatePOModalProps {
     form: POForm;
     setForm: Dispatch<SetStateAction<POForm>>;
     onSubmitted: () => void;
-    suppliers: { id: number; name: string }[];
+    suppliers: { id: number; name: string; }[];
     products: { id: number; name: string; unitName: string; price?: number }[];
     setSuppliers: (value: { id: number; name: string; supplierCode: string }[]) => void;
     setProducts: (value: { id: number; name: string; unitName: string; price?: number }[]) => void;
@@ -169,6 +169,12 @@ export default function CreatePOModal({
                 </div>
                 <div className="bg-muted p-3 rounded text-sm">
                     Supplier Info: (Will auto-fill when a supplier is selected)
+                    <label> Supplier Name</label>
+                    {<>
+                    <p>{suppliers.find(s => s.id === form.supplierId)?.name || ""}</p>
+                        {/*<p>{suppliers.find(s => s.id === form.supplierId)?.address || ""}</p>*/}                         
+                     </>
+                    }
                 </div>
 
                 <div>
