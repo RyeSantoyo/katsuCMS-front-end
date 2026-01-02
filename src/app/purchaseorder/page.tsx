@@ -30,7 +30,7 @@ export default function CreatePOPage() {
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState<POForm>(initialPOForm);
 
-    const [suppliers, setSuppliers] = useState<{ id: number; name: string; supplierCode: string }[]>([]);
+    const [suppliers, setSuppliers] = useState<{ id: number; name: string; supplierCode: string; address: string }[]>([]);
 
     const [products, setProducts] = useState<{ id: number; name: string; unitName: string }[]>([]);
     const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderDto[]>([]);
@@ -43,7 +43,7 @@ export default function CreatePOPage() {
                 const productData = await productServices.getAll();
 
                 setSuppliers(
-                    supplierData.map(s => ({ id: s.id, name: s.supplierName, supplierCode: s.supplierCode }))
+                    supplierData.map(s => ({ id: s.id, name: s.supplierName, supplierCode: s.supplierCode, address: s.address }))
                 );
                 setProducts(
                     productData.map(p => ({ id: p.id, name: p.productName, unitName: p.unitName }))
@@ -55,7 +55,6 @@ export default function CreatePOPage() {
             }
         }
         loadDropDown();
-
     }, []);
 
     const handleSubmit = async () => {

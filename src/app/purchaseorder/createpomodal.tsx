@@ -21,9 +21,9 @@ interface CreatePOModalProps {
     form: POForm;
     setForm: Dispatch<SetStateAction<POForm>>;
     onSubmitted: () => void;
-    suppliers: { id: number; name: string; }[];
+    suppliers: { id: number; name: string; supplierCode: string; address: string }[];
     products: { id: number; name: string; unitName: string; price?: number }[];
-    setSuppliers: (value: { id: number; name: string; supplierCode: string }[]) => void;
+    setSuppliers: (value: { id: number; name: string; supplierCode: string; address: string }[]) => void;
     setProducts: (value: { id: number; name: string; unitName: string; price?: number }[]) => void;
 }
 
@@ -58,7 +58,8 @@ export default function CreatePOModal({
                 res.map(s => ({
                     id: s.id,
                     name: s.supplierName,
-                    supplierCode: s.supplierCode
+                    supplierCode: s.supplierCode,
+                    address: s.address
                 }))
             );
         }
@@ -114,7 +115,7 @@ export default function CreatePOModal({
     };
 
     const handleProductChange = (index: number, productId: number)=>{
-        const product = products.find(p => p.id === productId);
+        const product = products.find(p => p.id === productId || "N/A");
         if(!products) return;
     }
     return (
@@ -169,26 +170,29 @@ export default function CreatePOModal({
                 </div>
                 <div className="bg-muted p-3 rounded text-sm">
                     Supplier Info: (Will auto-fill when a supplier is selected)
-                    <label> Supplier Name</label>
-                    {<>
-                    <p>{suppliers.find(s => s.id === form.supplierId)?.name || ""}</p>
-                        {/*<p>{suppliers.find(s => s.id === form.supplierId)?.address || ""}</p>*/}                         
-                     </>
-                    }
+                    <div>
+                        <strong>Supplier Name:</strong>{suppliers.find(s=> s.id===form.supplierId)?.name || "N/A"} </div>                       
+                    <div>
+                        <strong>Supplier Code:</strong> {suppliers.find(s => s.id === form.supplierId)?.supplierCode || "N/A"}
+                    </div>
+                    <div>
+                        <strong>Address:</strong> {suppliers.find(s => s.id === form.supplierId)?.address || "N/A"}                        
+                    </div>
+                    
                 </div>
 
-                <div>
+                {/* <div>
                     <label>Total Amount</label>
                     <input
                         type="number"
                         value={form.totalAmount}
                         onChange={e => setForm(prev => ({ ...prev, totalAmount: Number(e.target.value) }))}
                         className="w-full border rounded px-2 py-1" readOnly/>
-                </div>
+                </div> */}
 
                 <div className="mt-6">
                     <div className="flex justify-between items-center mb-2">
-                        <h3 className="font-semibold">Products</h3>
+                        <h2 className="font-semibold">Products</h2>
                         <Button variant="outline" size="sm">
                             Add Item
                         </Button>
