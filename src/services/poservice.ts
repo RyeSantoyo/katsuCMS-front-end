@@ -4,7 +4,11 @@ import { PurchaseOrderDto, PurchaseOrderCreateDto, PurchaseOrderUpdateDto } from
 import { api } from "@/lib/api";
 
 export const poServices = {
-...createCrudService<PurchaseOrderDto, PurchaseOrderCreateDto, PurchaseOrderUpdateDto>("purchaseorder"),
-generatePoNumber: () => api.get<{poNumber: string}>("/purchaseorder/generateponumber"),
-};
+...createCrudService<
+PurchaseOrderDto, 
+PurchaseOrderCreateDto, 
+PurchaseOrderUpdateDto>("../types/purchaseorder"),
 
+generatePoNumber: () => 
+    api.get<{poNumber: string}>("/purchaseorder/GeneratePONumber"),
+};

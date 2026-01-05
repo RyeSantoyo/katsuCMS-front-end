@@ -44,8 +44,8 @@ export default function CreatePOModal({
 
     const loadGeneratedPO = async () => {
         try {
-            const res = await poServices.getAll();
-            setForm(prev => ({ ...prev, poNumber: "" }));
+            const res = await poServices.generatePoNumber();
+            setForm(prev => ({ ...prev, poNumber: res.data.poNumber }));
         }
         catch (error) {
             toast.error("Failed to load generated PO Number.");
@@ -131,9 +131,9 @@ export default function CreatePOModal({
                     <div>
                         <label>PO Number</label>
                         <input
-                            //type="text"
+                            type="text"
                             value={form.poNumber}
-                            //onChange={e => setForm(prev => ({ ...prev, poNumber: e.target.value }))}
+                            onChange={e => setForm(prev => ({ ...prev, poNumber: e.target.value }))}
                             className="w-full border rounded px-2 py-1"
                             disabled />
                     </div>
