@@ -114,50 +114,53 @@ export default function CreatePOModal({
         return items.reduce((total, item) => total + item.subTotal, 0);
     };
 
-    // const handleProductChange = (index: number, productId: number)=>{
-    //     const product = products.find(p => p.id === productId);
-    //     if(!product) return;
-
-    //     setForm (prev=>{
-
-    //         const updatedItems = [...prev.items];
-    //         updatedItems[index] = {
-    //             ...updatedItems[index],
-    //             productId: product.id,
-    //             productName: product.name,
-    //             unitName: product.unitName,
-    //             unitPrice: product.price || 0,
-    //             quantity: 1,    
-    //             subTotal: product.price || 0,
-    //         };
-    //         const totalAmount = computeTotal(updatedItems);
-    //         return {
-    //             ...prev,
-    //             items: updatedItems,
-    //             totalAmount
-    //         };
-    //     }); 
-    // }
     const handleProductChange = (index: number, productId: number) => {
         const product = products.find(p => p.id === productId);
         if (!product) return;
 
         setForm(prev => {
-            const updated = [...prev.items];
-            updated[index].productId = productId;
-            updated[index].productName = product.name;
-            updated[index].unitName = product.unitName;
-            updated[index].quantity = product.quantity ?? 0;
-            updated[index].unitPrice = product.price ?? 0;
 
-
+            const updatedItems = [...prev.items];
+            updatedItems[index] = {
+                ...updatedItems[index],
+                productId: product.id,
+                productName: product.name,
+                unitName: product.unitName,
+                unitPrice: product.price || 0,
+                quantity: 1,
+                subTotal: product.price || 0,
+            };
+            const totalAmount = computeTotal(updatedItems);
             return {
                 ...prev,
-                items: updated,
-                totalAmount: computeTotal(updated)
+                items: updatedItems,
+                totalAmount
             };
         });
-    };
+    }
+
+    // console.log("Products:", products);
+    console.log("Form Items:", form.items);
+    // const handleProductChange = (index: number, productId: number) => {
+    //     const product = products.find(p => p.id === productId);
+    //     if (!product) return;
+
+    //     setForm(prev => {
+    //         const updated = [...prev.items];
+    //         updated[index].productId = productId;
+    //         updated[index].productName = product.name;
+    //         updated[index].unitName = product.unitName;
+    //         updated[index].quantity = product.quantity ?? 0;
+    //         updated[index].unitPrice = product.price ?? 0;
+
+
+    //         return {
+    //             ...prev,
+    //             items: updated,
+    //             totalAmount: computeTotal(updated)
+    //         };
+    //     });
+    // };
 
     const handleQuantityChange = (index: number, quantity: number) => {
         setForm(prev => {
@@ -173,7 +176,69 @@ export default function CreatePOModal({
     }
 
     if (!open) return null;
+    //     return (
+    //         <div className="modal-backdrop">
+    //             <div className="modal">
+    //                 <h2>Create Purchase Order</h2>
 
+    //                 <div>
+    //                     <label>PO Number</label>
+    //                     <input type="text" value={form.poNumber} readOnly />
+    //                 </div>
+
+    //                 <div>
+    //                     <label>Supplier</label>
+    //                     <select
+    //                         value={form.supplierId}
+    //                         onChange={(e) => handleSupplierChange(Number(e.target.value))}
+    //                     >
+    //                         <option value={0}>Select Supplier</option>
+    //                         {suppliers.map(s => (
+    //                             <option key={s.id} value={s.id}>{s.name}</option>
+    //                         ))}
+    //                     </select>
+    //                 </div>
+
+    //                 <div>
+    //                     <button onClick={addProductRow}>Add Product</button>
+    //                 </div>
+
+    //                 {/* Product rows */}
+    //                 {form.items.map((item, index) => (
+    //                     <div key={index} className="row">
+    //                         <select
+    //                             value={item.productId}
+    //                             onChange={(e) => handleProductChange(index, Number(e.target.value))}
+    //                         >
+    //                             <option value={0}>Select Product</option>
+    //                             {products.map(p => (
+    //                                 <option key={p.id} value={p.id}>{p.name}</option>
+    //                             ))}
+    //                         </select>
+
+    //                         <input
+    //                             type="number"
+    //                             value={item.quantity}
+    //                             onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
+    //                             placeholder="Qty"
+    //                         />
+
+    //                         <input type="number" value={item.unitPrice} readOnly />
+    //                         <input type="number" value={item.subTotal} readOnly />
+    //                     </div>
+    //                 ))}
+
+    //                 <div>
+    //                     <label>Total Amount: </label>
+    //                     <span>{form.totalAmount.toFixed(2)}</span>
+    //                 </div>
+
+    //                 <button onClick={onSubmitted}>Submit</button>
+    //                 <button onClick={onClose}>Close</button>
+    //             </div>
+    //         </div>
+    //     );
+    // }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-3xl">
@@ -259,20 +324,29 @@ export default function CreatePOModal({
                         </p>
                     </div> */}
 
-                    {form.items.map((item, index) =>
-                        <div key={index} className="row grid grid-cols-5 gap-2 mb-2 items-end">
+                    {form.items.map((item, index) => (
+                        <div key={index} className="row">
                             <select
                                 value={item.productId}
                                 onChange={(e) => handleProductChange(index, Number(e.target.value))}
                             >
-                                <option value="0">Select Product</option>
+                                <option value={0}>Select Product</option>
                                 {products.map(p => (
                                     <option key={p.id} value={p.id}>{p.name}</option>
                                 ))}
                             </select>
 
+                            <input
+                                type="number"
+                                value={item.quantity}
+                                onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
+                                placeholder="Qty"
+                            />
+
+                         <input type="number" value={item.unitPrice} readOnly />
+                         <input type="number" value={item.subTotal} readOnly />
                         </div>
-                    )}
+                    ))}
                 </div>
 
                 {/* End of Product Selection */}
