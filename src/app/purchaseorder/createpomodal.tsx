@@ -22,9 +22,9 @@ interface CreatePOModalProps {
     setForm: Dispatch<SetStateAction<POForm>>;
     onSubmitted: () => void;
     suppliers: { id: number; name: string; supplierCode: string; address: string }[];
-    products: { id: number; name: string; unitName: string; price?: number }[];
+    products: { id: number; name: string; unitName: string; price?: number; quantity?: number }[];
     setSuppliers: (value: { id: number; name: string; supplierCode: string; address: string }[]) => void;
-    setProducts: (value: { id: number; name: string; unitName: string; price?: number }[]) => void;
+    setProducts: (value: { id: number; name: string; unitName: string; price?: number; quantity?: number }[]) => void;
 }
 
 export default function CreatePOModal({
@@ -107,17 +107,73 @@ export default function CreatePOModal({
                     subTotal: 0
                 }
             ]
-        }));        
+        }));
     };
 
     const computeTotal = (items: POFormItems[]) => {
         return items.reduce((total, item) => total + item.subTotal, 0);
     };
 
-    const handleProductChange = (index: number, productId: number)=>{
-        const product = products.find(p => p.id === productId || "N/A");
-        if(!products) return;
+    // const handleProductChange = (index: number, productId: number)=>{
+    //     const product = products.find(p => p.id === productId);
+    //     if(!product) return;
+
+    //     setForm (prev=>{
+
+    //         const updatedItems = [...prev.items];
+    //         updatedItems[index] = {
+    //             ...updatedItems[index],
+    //             productId: product.id,
+    //             productName: product.name,
+    //             unitName: product.unitName,
+    //             unitPrice: product.price || 0,
+    //             quantity: 1,    
+    //             subTotal: product.price || 0,
+    //         };
+    //         const totalAmount = computeTotal(updatedItems);
+    //         return {
+    //             ...prev,
+    //             items: updatedItems,
+    //             totalAmount
+    //         };
+    //     }); 
+    // }
+    const handleProductChange = (index: number, productId: number) => {
+        const product = products.find(p => p.id === productId);
+        if (!product) return;
+
+        setForm(prev => {
+            const updated = [...prev.items];
+            updated[index].productId = productId;
+            updated[index].productName = product.name;
+            updated[index].unitName = product.unitName;
+            updated[index].quantity = product.quantity ?? 0;
+            updated[index].unitPrice = product.price ?? 0;
+
+
+            return {
+                ...prev,
+                items: updated,
+                totalAmount: computeTotal(updated)
+            };
+        });
+    };
+
+    const handleQuantityChange = (index: number, quantity: number) => {
+        setForm(prev => {
+            const updatedItems = [...prev.items];
+            updatedItems[index].quantity = quantity;
+            updatedItems[index].subTotal = updatedItems[index].unitPrice * quantity;
+            return {
+                ...prev,
+                items: updatedItems,
+                totalAmount: computeTotal(updatedItems)
+            };
+        });
     }
+
+    if (!open) return null;
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-3xl">
@@ -139,12 +195,12 @@ export default function CreatePOModal({
                     </div>
                     <div>
                         <label>Supplier ID</label>
-                        { <input
+                        {<input
                             type="number"
                             value={form.supplierId}
                             onChange={e => setForm(prev => ({ ...prev, supplierId: Number(e.target.value) }))}
                             className="w-full border rounded px-2 py-1"
-                            readOnly/> }
+                            readOnly />}
                     </div>
                     {/*date*/}
                     <div>
@@ -171,14 +227,14 @@ export default function CreatePOModal({
                 <div className="bg-muted p-3 rounded text-sm">
                     Supplier Info: (Will auto-fill when a supplier is selected)
                     <div>
-                        <strong>Supplier Name:</strong>{suppliers.find(s=> s.id===form.supplierId)?.name || "N/A"} </div>                       
+                        <strong>Supplier Name:</strong>{suppliers.find(s => s.id === form.supplierId)?.name || "N/A"} </div>
                     <div>
                         <strong>Supplier Code:</strong> {suppliers.find(s => s.id === form.supplierId)?.supplierCode || "N/A"}
                     </div>
                     <div>
-                        <strong>Address:</strong> {suppliers.find(s => s.id === form.supplierId)?.address || "N/A"}                        
+                        <strong>Address:</strong> {suppliers.find(s => s.id === form.supplierId)?.address || "N/A"}
                     </div>
-                    
+
                 </div>
 
                 {/* <div>
@@ -193,16 +249,33 @@ export default function CreatePOModal({
                 <div className="mt-6">
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="font-semibold">Products</h2>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={addProductRow}>
                             Add Item
                         </Button>
                     </div>
-                    <div className="border rounded p-3 text-sm">
+                    {/* <div className="border rounded p-3 text-sm">
                         <p className="text-muted-forground">
                             (Product list and item details will be displayed here)
                         </p>
-                    </div>
+                    </div> */}
+
+                    {form.items.map((item, index) =>
+                        <div key={index} className="row grid grid-cols-5 gap-2 mb-2 items-end">
+                            <select
+                                value={item.productId}
+                                onChange={(e) => handleProductChange(index, Number(e.target.value))}
+                            >
+                                <option value="0">Select Product</option>
+                                {products.map(p => (
+                                    <option key={p.id} value={p.id}>{p.name}</option>
+                                ))}
+                            </select>
+
+                        </div>
+                    )}
                 </div>
+
+                {/* End of Product Selection */}
                 <div className="mt-4 text-right font-semibold text-lg">
                     Total : {form.totalAmount.toFixed(2)}
                 </div>

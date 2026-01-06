@@ -67,6 +67,8 @@ export interface POForm {
 
 export interface POFormItems {
     productId: number | "";
+    productName: string;
+    unitName: string;
     quantity: number;
     unitPrice: number;
     subTotal: number;
