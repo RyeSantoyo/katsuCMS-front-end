@@ -134,11 +134,11 @@ export default function CreatePOModal({
                 unitPrice,
                 subTotal
             };
-            
+
             return {
                 ...prev,
                 items: updatedItems,
-                totalAmount : computeTotal(updatedItems)
+                totalAmount: computeTotal(updatedItems)
             };
         });
     }
@@ -296,13 +296,85 @@ export default function CreatePOModal({
                     </div>
 
                 </div>
+                <div className="mt-6 border-t pt-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-semibold">Order Items</h3>
+                        <Button variant="outline" size="sm" onClick={addProductRow}>
+                            + Add Item
+                        </Button>
+                    </div>
 
-                <div className="mt-6">
+                    <table className="w-full mt-6 text-left border-collapse">
+                        <thead>
+                            <tr className="text-sm font-medium text-gray-500 border-b">
+                                <th className="pb-2">Product</th>
+                                <th className="pb-2">Quantity</th>
+                                <th className="pb-2">Unit Price</th>
+                                <th className="pb-2">Sub Total</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                            {form.items.map((item, index) => (
+                                <tr key={index} className="text-sm">
+                                    <td className="py-3 pr-2">
+                                        <select
+                                            value={item.productId}
+                                            onChange={(e) => handleProductChange(index, Number(e.target.value))}
+                                            className="w-full border rounded px-2 py-1"
+                                        >
+                                            <option value={0}>Select Product</option>
+                                            {products.map(p => (
+                                                <option key={p.id} value={p.id}>{p.name}</option>
+                                            ))}
+                                        </select>
+                                    </td>
+                                    <td className="py-3 pr-2">
+                                        <input
+                                            type="number"
+                                            value={item.quantity}
+                                            onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
+                                            className="w-full border rounded px-2 py-1"
+                                            placeholder="Qty"
+                                            min={1}
+                                        />
+                                    </td>
+                                    <td className="py-3 pr-2">
+                                        <input
+                                            type="number"
+                                            value={item.unitPrice?.toString() || ""}
+                                            readOnly
+                                            className="w-full border rounded px-2 py-1 bg-gray-100 text-right"
+                                        />
+                                    </td>
+                                    <td className="py-3 pr-2">
+                                        <input
+                                            type="number"
+                                            value={item.subTotal?.toString() || ""}
+                                            readOnly
+                                            className="w-full border rounded px-2 py-1 bg-gray-100 text-right"
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+
+                    </table>
+                </div>
+
+                    {/* <div className="mt-6 border-t pt-4">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-semibold">Order Items</h3>
+                        <Button variant="outline" size="sm" onClick={addProductRow}>
+                            + Add Item
+                        </Button>
+                    </div>
+
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="font-semibold">Products</h2>
-                        <Button variant="outline" size="sm" onClick={addProductRow}>
-                            Add Item
-                        </Button>
+                        <h2 className="font-semibold">Quantity</h2>
+                        <h2 className="font-semibold">Unit Price</h2>
+                        <h2 className="font-semibold">Sub Total</h2>
+
                     </div>
 
                     {form.items.map((item, index) => (
@@ -341,10 +413,10 @@ export default function CreatePOModal({
                                 className="w-28 border rounded px-2 py-1 bg-gray-100 text-right"
                             />
 
-                            <button 
-                            type="button"
-                            onClick={()=> removeRow(index)}
-                            className="text-red-500 hover:text-red-700"
+                            <button
+                                type="button"
+                                onClick={() => removeRow(index)}
+                                className="text-red-500 hover:text-red-700"
                             >
                                 X
                             </button>
@@ -352,17 +424,17 @@ export default function CreatePOModal({
 
 
                     ))}
-                </div>
+                </div> */}
 
-                {/* End of Product Selection */}
-                <div className="mt-4 text-right font-semibold text-lg">
-                    Total : {form.totalAmount.toFixed(2)}
-                </div>
-                { /* Add more form fields as necessary */}
-                <DialogFooter className="pt-4">
-                    <Button variant="outline" onClick={onClose}>Cancel</Button>
-                    <Button onClick={onSubmitted}>Submit</Button>
-                </DialogFooter>
+                    {/* End of Product Selection */}
+                    <div className="mt-4 text-right font-semibold text-lg">
+                        Total : {form.totalAmount.toFixed(2)}
+                    </div>
+                    { /* Add more form fields as necessary */}
+                    <DialogFooter className="pt-4">
+                        <Button variant="outline" onClick={onClose}>Cancel</Button>
+                        <Button onClick={onSubmitted}>Submit</Button>
+                    </DialogFooter>
             </DialogContent>
         </Dialog>
     );
