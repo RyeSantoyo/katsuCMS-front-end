@@ -75,7 +75,7 @@ export default function CreatePOModal({
     }, [open]);
 
     const handleSupplierChange = async (supplierId: number) => {
-        setForm(prev => ({ ...prev, supplierId, items: [] }));
+        setForm(prev => ({ ...prev, supplierId, items: [], totalAmount: 0 }));
         try {
             const res = await productServices.getAll();
             const filtered = res.filter(p => p.supplierIds.includes(supplierId));
@@ -121,46 +121,30 @@ export default function CreatePOModal({
         setForm(prev => {
 
             const updatedItems = [...prev.items];
+            const quantity = updatedItems[index].quantity || 1;
+            const unitPrice = product.price || 0;
+            const subTotal = unitPrice * quantity;
+
             updatedItems[index] = {
                 ...updatedItems[index],
                 productId: product.id,
                 productName: product.name,
                 unitName: product.unitName,
-                unitPrice: product.price || 0,
-                quantity: 1,
-                subTotal: product.price || 0,
+                quantity,
+                unitPrice,
+                subTotal
             };
-            const totalAmount = computeTotal(updatedItems);
+            
             return {
                 ...prev,
                 items: updatedItems,
-                totalAmount
+                totalAmount : computeTotal(updatedItems)
             };
         });
     }
 
     // console.log("Products:", products);
     console.log("Form Items:", form.items);
-    // const handleProductChange = (index: number, productId: number) => {
-    //     const product = products.find(p => p.id === productId);
-    //     if (!product) return;
-
-    //     setForm(prev => {
-    //         const updated = [...prev.items];
-    //         updated[index].productId = productId;
-    //         updated[index].productName = product.name;
-    //         updated[index].unitName = product.unitName;
-    //         updated[index].quantity = product.quantity ?? 0;
-    //         updated[index].unitPrice = product.price ?? 0;
-
-
-    //         return {
-    //             ...prev,
-    //             items: updated,
-    //             totalAmount: computeTotal(updated)
-    //         };
-    //     });
-    // };
 
     const handleQuantityChange = (index: number, quantity: number) => {
         setForm(prev => {
@@ -174,6 +158,8 @@ export default function CreatePOModal({
             };
         });
     }
+
+    const displayNumber = (n?: number) => n?.toString() || "";
 
     if (!open) return null;
     //     return (
@@ -281,7 +267,7 @@ export default function CreatePOModal({
                         <select
                             className="w-full border rounded px-2 py-1"
                             value={form.supplierId}
-                            onChange={e => setForm(prev => ({ ...prev, supplierId: Number(e.target.value) }))}>
+                            onChange={e => handleSupplierChange(Number(e.target.value))}>
                             <option value="">Select Supplier</option>
                             {suppliers.map(s => (
                                 <option key={s.id} value={s.id}>{s.name}</option>
@@ -302,15 +288,6 @@ export default function CreatePOModal({
 
                 </div>
 
-                {/* <div>
-                    <label>Total Amount</label>
-                    <input
-                        type="number"
-                        value={form.totalAmount}
-                        onChange={e => setForm(prev => ({ ...prev, totalAmount: Number(e.target.value) }))}
-                        className="w-full border rounded px-2 py-1" readOnly/>
-                </div> */}
-
                 <div className="mt-6">
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="font-semibold">Products</h2>
@@ -318,17 +295,13 @@ export default function CreatePOModal({
                             Add Item
                         </Button>
                     </div>
-                    {/* <div className="border rounded p-3 text-sm">
-                        <p className="text-muted-forground">
-                            (Product list and item details will be displayed here)
-                        </p>
-                    </div> */}
 
                     {form.items.map((item, index) => (
-                        <div key={index} className="row">
+                        <div key={index} className="flex gap-2 items-center mb-2">
                             <select
                                 value={item.productId}
                                 onChange={(e) => handleProductChange(index, Number(e.target.value))}
+                                className="border rounded px-2 py-1 w-36"
                             >
                                 <option value={0}>Select Product</option>
                                 {products.map(p => (
@@ -340,12 +313,28 @@ export default function CreatePOModal({
                                 type="number"
                                 value={item.quantity}
                                 onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
+                                className="w-20 border rounded px-2 py-1"
                                 placeholder="Qty"
+                                min={1}
                             />
 
-                         <input type="number" value={item.unitPrice} readOnly />
-                         <input type="number" value={item.subTotal} readOnly />
+                            <input
+                                type="number"
+                                value={item.unitPrice?.toString() || ""}
+                                readOnly
+                                className="w-24 border rounded px-2 py-1 bg-gray-100 text-right"
+                            />
+
+                            <input
+                                type="number"
+                                value={item.subTotal?.toString() || ""}
+                                readOnly
+                                className="w-28 border rounded px-2 py-1 bg-gray-100 text-right"
+                            />
+
                         </div>
+
+
                     ))}
                 </div>
 
