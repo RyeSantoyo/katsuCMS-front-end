@@ -159,8 +159,17 @@ export default function CreatePOModal({
         });
     }
 
-    const displayNumber = (n?: number) => n?.toString() || "";
-
+    const removeRow = (index: number) => {
+        setForm(prev => {
+            const addedItems = [...prev.items];
+            addedItems.splice(index, 1);
+            return {
+                ...prev,
+                items: addedItems,
+                totalAmount: computeTotal(addedItems)
+            };
+        });
+    }
     if (!open) return null;
     //     return (
     //         <div className="modal-backdrop">
@@ -332,6 +341,13 @@ export default function CreatePOModal({
                                 className="w-28 border rounded px-2 py-1 bg-gray-100 text-right"
                             />
 
+                            <button 
+                            type="button"
+                            onClick={()=> removeRow(index)}
+                            className="text-red-500 hover:text-red-700"
+                            >
+                                X
+                            </button>
                         </div>
 
 
