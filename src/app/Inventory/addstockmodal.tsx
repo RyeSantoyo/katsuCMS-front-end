@@ -223,11 +223,9 @@ export default function StockAddModal({ open, onClose, onCreated }: StockAddProp
                                 </div>
                             </div>
 
-                            {/* === Suppliers & Computed Value (Full Width Sections) === */}
                             <div className="grid grid-cols-2 gap-4 pt-4 border-t">
                                 <h3 className="col-span-2 text-sm font-semibold text-gray-500">Other Data</h3>
 
-                                {/* Suppliers (Checkbox Group) */}
                                 <div className="space-y-2 col-span-1">
                                     <Label>Suppliers</Label>
                                     <div className="space-y-1">
@@ -238,7 +236,6 @@ export default function StockAddModal({ open, onClose, onCreated }: StockAddProp
                                                 const opt = { value: id, label: name };
                                                 return (
                                                     <div key={id} className="flex items-center space-x-2">
-                                                        {/* Use a modern Checkbox component */}
                                                         <Checkbox
                                                             id={`supplier-${id}`}
                                                             checked={isChecked}
@@ -263,14 +260,12 @@ export default function StockAddModal({ open, onClose, onCreated }: StockAddProp
                                 </div>
 
                                 <div className="col-span-1 space-y-4">
-                                    {/* Inventory Value (Computed) */}
                                     <div className="space-y-2">
                                         <Label>Inventory Value</Label>
-                                        {/* Use a disabled input to highlight it's a computed value */}
                                         <Input readOnly disabled value={`$${inventoryValue.toFixed(2)}`} className="font-bold text-lg" />
                                     </div>
 
-                                    {/* LastUpdated auto */}
+                                    
                                     <div className="space-y-2">
                                         <Label>Latest Update</Label>
                                         <Input
