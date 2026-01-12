@@ -116,41 +116,6 @@ export default function AddProductModal({ isOpen, onClose }: AddProductModalProp
             toast.error("Failed misserably");
         }
     }
-    //#region 
-    // async function handleDelete(id: number, productName: string) {
-    //     const confirm = window.confirm(`Are you sure you want to delete ${productName}`)
-
-    //     if (!confirm) return;
-
-    //     try {
-    //         await productServices.delete(id);
-    //         loadAllData();
-    //     }
-    //     catch (err) {
-    //         console.log("Failed to delete product", err)
-    //         toast.error("Failed to delete product");
-    //     }
-    //     return;
-    // }
-
-    // async function handleEdit(product: ProductDto) {
-    //     setEditingProduct(product)
-    //     setShowEditModal(true);
-    // }
-    // async function handleUpdate() {
-    //     if (!editingProduct) return;
-    //     try {
-    //         await productServices.update(editingProduct.id, editingProduct);
-    //         toast.success("Product updated successfully");
-    //         loadAllData();
-    //         setShowEditModal(false);
-    //         setEditingProduct(null);
-    //     } catch (err) {
-    //         console.log(err);
-    //         toast.error("Failed to update product");
-    //     }
-    // }
-    //#endregion
     return (
         <div>
             { /* Dialog Components */}
