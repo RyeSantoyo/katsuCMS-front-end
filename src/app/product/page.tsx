@@ -16,6 +16,8 @@ import { SupplierDto } from "@/types/supplier";
 // import SupplierMultiSelect, { CategoryMultiSelect } from "./multi-select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import AddProductModal from "./addproductmodal";
+import { Edit } from "lucide-react";
+import EditProductModal from "./editproductmodal";
 //import { parse } from "path";
 
 
@@ -165,6 +167,16 @@ export default function ProductPage() {
             <AddProductModal
                 isOpen={showAddModal}
                 onClose={() => setShowAddModal(false)}
+            />
+            <EditProductModal
+                open={showEditModal}
+                onClose={() => setShowEditModal(false)}
+                productId={editingProduct?.id || null}
+                productData={editingProduct}
+                onEditSuccess={() => {
+                    setShowEditModal(false);
+                    loadAllData();
+                }}
             />
         </div>
     )
