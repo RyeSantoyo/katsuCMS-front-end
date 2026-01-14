@@ -10,6 +10,11 @@ import { ProductDto, ProductForm } from "@/types/products";
 import { categoryServices } from "@/services/categoryservice";
 import { supplierServices } from "@/services/supplierservice";
 import { unitServices } from "@/services/unitservice";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { PCategoryDto } from "@/types/category";
+import { SupplierDto } from "@/types/supplier";
+import { UnitDto } from "../units/columns";
+import SupplierMultiSelect from "./multi-select";
 
 
 interface ProductAdjustmentModalProps {
@@ -28,6 +33,12 @@ export default function EditProductModal({
     onEditSuccess,
 }: ProductAdjustmentModalProps) {
     const [loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState<PCategoryDto[]>([]);
+    const [suppliers, setSuppliers] = useState<SupplierDto[]>([]);
+    const [units, setUnits] = useState<UnitDto[]>([]);
+
+    const [newSuppliers, setNewSuppliers] = useState<{ value: number; label: string }[]>([]);
+
 
     const [form, setForm] = useState<ProductForm>({
         productCode: "",
@@ -80,10 +91,22 @@ export default function EditProductModal({
     }, [open]);
 
     async function loadAll() {
-        categoryServices.getAll();
-        supplierServices.getAll();
-        unitServices.getAll();
+        try {
+            const [categoryData, supplierData, unitData] = await Promise.all([
+                categoryServices.getAll(),
+                supplierServices.getAll(),
+                unitServices.getAll(),
+            ]);
+
+            setCategories(categoryData);
+            setSuppliers(supplierData);
+            setUnits(unitData);
+        } catch (error) {
+            console.error("Failed to load reference data", error);
+            toast.error("Failed to load reference data");
+        }
     }
+
 
     const handleSubmit = async () => {
         if (!productId) return;
@@ -100,6 +123,9 @@ export default function EditProductModal({
                 supplierIds: form.supplierIds,
                 id: productId
             });
+            toast.success("Product updated successfully");
+            onEditSuccess?.();
+            onClose();
         } catch (error) {
             console.error("Failed to update product", error);
             toast.error("Failed to update product");
@@ -115,6 +141,16 @@ export default function EditProductModal({
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
+                        <Label htmlFor="productCode">Product Code</Label>
+                        <Input
+                            id="productCode"
+                            value={form.productCode}
+                            onChange={(e) => setForm({ ...form, productCode: e.target.value })}
+                            readOnly
+                        />
+                    </div>
+
+                    <div className="grid gap-2">
                         <Label htmlFor="productName">Product Name</Label>
                         <Input
                             id="productName"
@@ -122,15 +158,7 @@ export default function EditProductModal({
                             onChange={(e) => setForm({ ...form, productName: e.target.value })}
                         />
                     </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="productCode">Product Code</Label>
-                        <Input
-                            id="productCode"
-                            value={form.productCode}
-                            onChange={(e) => setForm({ ...form, productCode: e.target.value })}
-                        />
 
-                    </div>
                     <div className="grid gap-2">
                         <Label htmlFor="description">Description</Label>
                         <Input
@@ -146,6 +174,36 @@ export default function EditProductModal({
                             type="number"
                             value={form.price}
                             onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="category">Category</Label>
+                        <Select
+                            value={form.categoryId?.toString() ?? ""}
+                            onValueChange={(value) =>
+                                setForm({ ...form, categoryId: Number(value) })
+                            }
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select Category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {categories.map((cat) => (
+                                    <SelectItem key={cat.id} value={cat.id.toString()}>
+                                        {cat.categoryName}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="suppliers">Suppliers</Label>
+                        <SupplierMultiSelect
+                            suppliers={suppliers}
+                            newSuppliers={newSuppliers}
+                            setNewSuppliers={setNewSuppliers}
+                            setForm={setForm}
                         />
                     </div>
                 </div>
