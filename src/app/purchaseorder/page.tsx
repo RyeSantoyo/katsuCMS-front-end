@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 // import { DataTable } from "@/components/data-table";
- import { columns } from "./columns";
+import { columns } from "./columns";
 
 
 export const initialPOForm =
@@ -32,7 +32,7 @@ export default function CreatePOPage() {
 
     const [suppliers, setSuppliers] = useState<{ id: number; name: string; supplierCode: string; address: string }[]>([]);
 
-    const [products, setProducts] = useState<{ id: number; name: string; unitName: string }[]>([]);
+    const [products, setProducts] = useState<{ id: number; name: string; unitName: string, unitId: number }[]>([]);
     const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderDto[]>([]);
 
     useEffect(() => {
@@ -46,9 +46,9 @@ export default function CreatePOPage() {
                     supplierData.map(s => ({ id: s.id, name: s.supplierName, supplierCode: s.supplierCode, address: s.address }))
                 );
                 setProducts(
-                    productData.map(p => ({ id: p.id, name: p.productName, unitName: p.unitName }))
+                    productData.map(p => ({ id: p.id, name: p.productName, unitName: p.unitName, unitId: p.unitId }))
                 );
-            } 
+            }
             catch (error) {
                 console.error("Error loading dropdown data:", error);
                 toast.error("Failed to load suppliers or products");
@@ -65,10 +65,12 @@ export default function CreatePOPage() {
             orderDate: form.orderDate,
             status: form.status,
             totalAmount: form.totalAmount,
-            purchaseOrderDetails: form.items.map(i => ({
+            orderDetails: form.items.map(i => ({
                 productId: typeof i.productId === "number" ? i.productId : Number(i.productId),
+                productName: products.find(p => p.id === (typeof i.productId === "number" ? i.productId : Number(i.productId)))?.name || "",
                 quantity: i.quantity,
                 unitPrice: i.unitPrice,
+                unitId: products.find(p => p.id === (typeof i.productId === "number" ? i.productId : Number(i.productId)))?.unitId || 0,
                 subtotal: i.subTotal
             }))
         };
@@ -105,32 +107,32 @@ export default function CreatePOPage() {
     // };
     return (
         <>
-        <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
-            <Card>
-                <CardHeader className="flex flex-row justify-between items-center pb-4">
-                    <div>
-                        <CardTitle className="flex items-center gap-2"> Purchase Order </CardTitle>
-                        <p className="text-sm text-muted-foreground"> Manage your purchase orders </p>
-                    </div>
-            <Button onClick={() => setOpen(true)}>Create PO</Button>
-                </CardHeader>
-            </Card>
-            <br/>
-             <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />
+            <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
+                <Card>
+                    <CardHeader className="flex flex-row justify-between items-center pb-4">
+                        <div>
+                            <CardTitle className="flex items-center gap-2"> Purchase Order </CardTitle>
+                            <p className="text-sm text-muted-foreground"> Manage your purchase orders </p>
+                        </div>
+                        <Button onClick={() => setOpen(true)}>Create PO</Button>
+                    </CardHeader>
+                </Card>
+                <br />
+                <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />
 
 
-            <CreatePOModal
-                open={open}
-                onClose={() => setOpen(false)}
-                setOpen={setOpen}
-                form={form}
-                setForm={setForm}
-                onSubmitted={handleSubmit}
-                suppliers={suppliers}
-                products={products}
-                setSuppliers={setSuppliers}
-                setProducts={setProducts}
-            />
+                <CreatePOModal
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    setOpen={setOpen}
+                    form={form}
+                    setForm={setForm}
+                    onSubmitted={handleSubmit}
+                    suppliers={suppliers}
+                    products={products}
+                    setSuppliers={setSuppliers}
+                    setProducts={setProducts}
+                />
             </div>
         </>
     );

@@ -22,9 +22,9 @@ interface CreatePOModalProps {
     setForm: Dispatch<SetStateAction<POForm>>;
     onSubmitted: () => void;
     suppliers: { id: number; name: string; supplierCode: string; address: string }[];
-    products: { id: number; name: string; unitName: string; price?: number; quantity?: number }[];
+    products: { id: number; name: string; unitName: string; price?: number; quantity?: number, unitId: number }[];
     setSuppliers: (value: { id: number; name: string; supplierCode: string; address: string }[]) => void;
-    setProducts: (value: { id: number; name: string; unitName: string; price?: number; quantity?: number }[]) => void;
+    setProducts: (value: { id: number; name: string; unitName: string; price?: number; quantity?: number, unitId: number }[]) => void;
 }
 
 export default function CreatePOModal({
@@ -84,7 +84,8 @@ export default function CreatePOModal({
                     id: p.id,
                     name: p.productName,
                     unitName: p.unitName,
-                    price: p.price
+                    price: p.price,
+                    unitId: p.unitId,
                 })))
             );
         }
@@ -171,69 +172,6 @@ export default function CreatePOModal({
         });
     }
     if (!open) return null;
-    //     return (
-    //         <div className="modal-backdrop">
-    //             <div className="modal">
-    //                 <h2>Create Purchase Order</h2>
-
-    //                 <div>
-    //                     <label>PO Number</label>
-    //                     <input type="text" value={form.poNumber} readOnly />
-    //                 </div>
-
-    //                 <div>
-    //                     <label>Supplier</label>
-    //                     <select
-    //                         value={form.supplierId}
-    //                         onChange={(e) => handleSupplierChange(Number(e.target.value))}
-    //                     >
-    //                         <option value={0}>Select Supplier</option>
-    //                         {suppliers.map(s => (
-    //                             <option key={s.id} value={s.id}>{s.name}</option>
-    //                         ))}
-    //                     </select>
-    //                 </div>
-
-    //                 <div>
-    //                     <button onClick={addProductRow}>Add Product</button>
-    //                 </div>
-
-    //                 {/* Product rows */}
-    //                 {form.items.map((item, index) => (
-    //                     <div key={index} className="row">
-    //                         <select
-    //                             value={item.productId}
-    //                             onChange={(e) => handleProductChange(index, Number(e.target.value))}
-    //                         >
-    //                             <option value={0}>Select Product</option>
-    //                             {products.map(p => (
-    //                                 <option key={p.id} value={p.id}>{p.name}</option>
-    //                             ))}
-    //                         </select>
-
-    //                         <input
-    //                             type="number"
-    //                             value={item.quantity}
-    //                             onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
-    //                             placeholder="Qty"
-    //                         />
-
-    //                         <input type="number" value={item.unitPrice} readOnly />
-    //                         <input type="number" value={item.subTotal} readOnly />
-    //                     </div>
-    //                 ))}
-
-    //                 <div>
-    //                     <label>Total Amount: </label>
-    //                     <span>{form.totalAmount.toFixed(2)}</span>
-    //                 </div>
-
-    //                 <button onClick={onSubmitted}>Submit</button>
-    //                 <button onClick={onClose}>Close</button>
-    //             </div>
-    //         </div>
-    //     );
-    // }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="max-w-3xl">
@@ -361,72 +299,6 @@ export default function CreatePOModal({
                     </table>
                 </div>
 
-                    {/* <div className="mt-6 border-t pt-4">
-                    <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold">Order Items</h3>
-                        <Button variant="outline" size="sm" onClick={addProductRow}>
-                            + Add Item
-                        </Button>
-                    </div>
-
-                    <div className="flex justify-between items-center mb-2">
-                        <h2 className="font-semibold">Products</h2>
-                        <h2 className="font-semibold">Quantity</h2>
-                        <h2 className="font-semibold">Unit Price</h2>
-                        <h2 className="font-semibold">Sub Total</h2>
-
-                    </div>
-
-                    {form.items.map((item, index) => (
-                        <div key={index} className="flex gap-2 items-center mb-2">
-                            <select
-                                value={item.productId}
-                                onChange={(e) => handleProductChange(index, Number(e.target.value))}
-                                className="border rounded px-2 py-1 w-36"
-                            >
-                                <option value={0}>Select Product</option>
-                                {products.map(p => (
-                                    <option key={p.id} value={p.id}>{p.name}</option>
-                                ))}
-                            </select>
-
-                            <input
-                                type="number"
-                                value={item.quantity}
-                                onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
-                                className="w-20 border rounded px-2 py-1"
-                                placeholder="Qty"
-                                min={1}
-                            />
-
-                            <input
-                                type="number"
-                                value={item.unitPrice?.toString() || ""}
-                                readOnly
-                                className="w-24 border rounded px-2 py-1 bg-gray-100 text-right"
-                            />
-
-                            <input
-                                type="number"
-                                value={item.subTotal?.toString() || ""}
-                                readOnly
-                                className="w-28 border rounded px-2 py-1 bg-gray-100 text-right"
-                            />
-
-                            <button
-                                type="button"
-                                onClick={() => removeRow(index)}
-                                className="text-red-500 hover:text-red-700"
-                            >
-                                X
-                            </button>
-                        </div>
-
-
-                    ))}
-                </div> */}
-
-                    {/* End of Product Selection */}
                     <div className="mt-4 text-right font-semibold text-lg">
                         Total : {form.totalAmount.toFixed(2)}
                     </div>

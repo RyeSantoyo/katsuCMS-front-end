@@ -7,7 +7,7 @@ export const poServices = {
 ...createCrudService<
 PurchaseOrderDto, 
 PurchaseOrderCreateDto, 
-PurchaseOrderUpdateDto>("../types/purchaseorder"),
+PurchaseOrderUpdateDto>("/purchaseorder"),
 
 generatePoNumber: () => 
     api.get<{poNumber: string}>("/purchaseorder/GeneratePONumber"),

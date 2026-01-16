@@ -137,17 +137,13 @@ export default function EditProductModal({
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>Edit Product</DialogTitle>
+                    <DialogTitle>Edit : {form.productName}</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                    <div className="grid gap-2">
+                    {/* <div className="grid gap-2 bg-gray"> */}
+                    <div className="grid gap-2 bg-gray">
                         <Label htmlFor="productCode">Product Code</Label>
-                        <Input
-                            id="productCode"
-                            value={form.productCode}
-                            onChange={(e) => setForm({ ...form, productCode: e.target.value })}
-                            readOnly
-                        />
+                        <p className="text-bold text-foreground">{form.productCode}</p>
                     </div>
 
                     <div className="grid gap-2">
@@ -175,6 +171,27 @@ export default function EditProductModal({
                             value={form.price}
                             onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
                         />
+                    </div>
+                    <div className="space-y-2">
+
+                        <Label htmlFor="unit">Unit</Label>
+                        <Select
+                            value={form.unitId?.toString() ?? ""}
+                            onValueChange={(value) =>
+                                setForm({ ...form, unitId: Number(value) })
+                            }
+                        >
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select Unit" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {units.map((unit) => (
+                                    <SelectItem key={unit.id} value={unit.id.toString()}>
+                                        {unit.unitName}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="category">Category</Label>

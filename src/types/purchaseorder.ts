@@ -17,7 +17,7 @@ export interface PurchaseOrderCreateDto {
     orderDate: string;
     status: PurchaseOrderStatus;
     totalAmount: number;
-    purchaseOrderDetails: PurchaseOrderDetailDto[];
+    orderDetails: PurchaseOrderDetailDto[];
 }
 export interface PurchaseOrderUpdateDto extends PurchaseOrderCreateDto {
     status: PurchaseOrderStatus;
