@@ -76,7 +76,7 @@ export default function CreatePOModal({
 
     const handleSupplierChange = async (supplierId: number) => {
         setForm(prev => ({ ...prev, supplierId, items: [], totalAmount: 0 }));
-        try {
+        try { 
             const res = await productServices.getAll();
             const filtered = res.filter(p => p.supplierIds.includes(supplierId));
             setProducts(

@@ -8,7 +8,7 @@ import CreatePOModal from "./createpomodal";
 import { supplierServices } from "@/services/supplierservice";
 import { productServices } from "@/services/productservice";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 // import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
@@ -56,6 +56,18 @@ export default function CreatePOPage() {
         }
         loadDropDown();
     }, []);
+        const fetchData = async()=>{
+        try {
+                const res = await fetch("http://localhost:5058/api/purchaseorder");
+                const data = await res.json();
+                setPurchaseOrders(data);
+        } catch (error) {
+            console.error("Failed to fetch purchase orders:", error);
+        }
+    };
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const handleSubmit = async () => {
         const dto: PurchaseOrderCreateDto = {
@@ -66,6 +78,7 @@ export default function CreatePOPage() {
             status: form.status,
             totalAmount: form.totalAmount,
             orderDetails: form.items.map(i => ({
+                poNumber: form.poNumber,
                 productId: typeof i.productId === "number" ? i.productId : Number(i.productId),
                 productName: products.find(p => p.id === (typeof i.productId === "number" ? i.productId : Number(i.productId)))?.name || "",
                 quantity: i.quantity,
@@ -81,7 +94,7 @@ export default function CreatePOPage() {
             setOpen(false);
             //setForm(initialPOForm);
         } catch (error) {
-            toast.error("Failed to create PO");
+            toast.error(error instanceof Error ? error.message : "Failed to create Purchase Order");
             console.error(error);
         }
 
@@ -116,6 +129,7 @@ export default function CreatePOPage() {
                         </div>
                         <Button onClick={() => setOpen(true)}>Create PO</Button>
                     </CardHeader>
+
                 </Card>
                 <br />
                 <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />

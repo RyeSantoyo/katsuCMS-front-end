@@ -49,15 +49,15 @@ export default function InventoryStockPage() {
     }
   };
 
-const handleEdit = (stock: InventoryStockDto) => {
-  setSelectedStock(stock);
-  setIsModalOpen(true); // open StockAdjustmentModal
-};
+  const handleEdit = (stock: InventoryStockDto) => {
+    setSelectedStock(stock);
+    setIsModalOpen(true); // open StockAdjustmentModal
+  };
 
-const handleView = (stock: InventoryStockDto) => {
-  setSelectedStock(stock);
-  setIsViewModalOpen(true); // open ViewStockModal
-};
+  const handleView = (stock: InventoryStockDto) => {
+    setSelectedStock(stock);
+    setIsViewModalOpen(true); // open ViewStockModal
+  };
 
   // const handleAdjustment = () => {
   //   setSelectedStock(null);
@@ -157,8 +157,8 @@ const handleView = (stock: InventoryStockDto) => {
         category={selectedStock?.category}
         currentQuantity={selectedStock?.quantity}
         inventoryValue={selectedStock?.inventoryValue}
-       // onAdjustmentSuccess={fetchStocks}
-         />
+      // onAdjustmentSuccess={fetchStocks}
+      />
 
     </div >
   );
