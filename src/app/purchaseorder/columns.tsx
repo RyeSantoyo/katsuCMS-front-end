@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PurchaseOrderDto, PurchaseOrderListDto } from "@/types/purchaseorder";
+import { /*PurchaseOrderDto,*/ PurchaseOrderListDto } from "@/types/purchaseorder";
 
 import {
     DropdownMenu,

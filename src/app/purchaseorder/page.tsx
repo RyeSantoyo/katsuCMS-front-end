@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 // import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
+import ViewPo from "./viewpo";
 
 export const initialPOForm =
 {
@@ -29,10 +30,14 @@ export default function CreatePOPage() {
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState<POForm>(initialPOForm);
 
+    const [isPoViewOpen, setIsPoViewOpen] = useState(false);
+
     const [suppliers, setSuppliers] = useState<{ id: number; name: string; supplierCode: string; address: string }[]>([]);
 
     const [products, setProducts] = useState<{ id: number; name: string; unitName: string, unitId: number }[]>([]);
     const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderListDto[]>([]);
+
+    const [selectedPo, setSelectedPo] = useState<PurchaseOrderListDto | null>(null);
 
     useEffect(() => {
 
@@ -109,8 +114,11 @@ export default function CreatePOPage() {
         throw new Error("Function not implemented.");
     }
 
-    function handleView(po: PurchaseOrderListDto): void {
-        throw new Error("Function not implemented.");
+    const handleView = (po: PurchaseOrderListDto) => {
+        // Implement view functionality
+        setSelectedPo(po);
+        setIsPoViewOpen(true);
+    
     }
 
     // const handleEdit = (po: PurchaseOrderCreateDto) => {
@@ -148,6 +156,24 @@ export default function CreatePOPage() {
                     setSuppliers={setSuppliers}
                     setProducts={setProducts}
                 />
+
+                <ViewPo
+                    open={isPoViewOpen}
+                    onClose={() => setIsPoViewOpen(false)}
+                    purchaseOrderId={selectedPo?.id || 0}
+                    supplierName={selectedPo?.supplierName}
+                    orderDate={selectedPo?.orderDate}
+                    totalAmount={selectedPo?.totalAmount}
+                    status={selectedPo?.status?.toString()}
+                    products = {selectedPo?.itemsCount ? Array.from({ length: selectedPo.itemsCount }, (_, i) => ({
+                        productName: `Product ${i + 1}`,
+                        quantity: 1,
+                        unitPrice: selectedPo.totalAmount / selectedPo.itemsCount,
+                        totalPrice: selectedPo.totalAmount / selectedPo.itemsCount
+                    }) ) : ([]
+                )}
+                />
+
             </div>
         </>
     );
