@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PurchaseOrderDto } from "@/types/purchaseorder";
+import { PurchaseOrderDto, PurchaseOrderListDto } from "@/types/purchaseorder";
 
 import {
     DropdownMenu,
@@ -16,9 +16,9 @@ import {
 
 export const columns = ({ onDelete, onEdit, onView }: {
     onDelete: (id: number, poNumber: string) => void;
-    onEdit: (po: PurchaseOrderDto) => void;
-    onView: (po: PurchaseOrderDto) => void;
-}): ColumnDef<PurchaseOrderDto>[] => [
+    onEdit: (po: PurchaseOrderListDto) => void;
+    onView: (po: PurchaseOrderListDto) => void;
+}): ColumnDef<PurchaseOrderListDto>[] => [
         {
             accessorKey: "poNumber",
             header: "PO Number"
@@ -43,20 +43,25 @@ export const columns = ({ onDelete, onEdit, onView }: {
         },
         {
             accessorKey: "createdDate",
-            header: "Created Date"
+            header: "Created Date",
+            cell: ({ row }) => new Date(row.original.orderDate).toLocaleDateString()
         },
         {
             accessorKey: "updatedAt",
-            header: "Updated At"
+            header: "Updated At",
+            cell: ({ row }) => new Date(row.original.orderDate).toLocaleDateString()
         },
         {
-            accessorKey: "orderDetails",
+            accessorKey: "itemsCount",
             header: "Items Ordered",
-            cell: ({ row }) => {
-                const details = row.original.orderDetails;
-                return <span>{details.length} item{details.length > 1 ? "s" : ""}</span>
-            }
+            cell: ({ row }) => (
+                <span>
+                    {row.original.itemsCount} item
+                    {row.original.itemsCount !== 1 ? "s" : ""}
+                </span>
+            )
         },
+
         {
             id: "action",
             header: "Actions",

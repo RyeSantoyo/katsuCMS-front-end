@@ -10,6 +10,16 @@ export interface PurchaseOrderDto {
     updatedAt: string;
     orderDetails: PurchaseOrderDetailDto[];
 }
+export interface PurchaseOrderListDto {
+    id: number;
+    poNumber: string;
+    supplierName: string;
+    orderDate: string;
+    status: PurchaseOrderStatus;
+    totalAmount: number;
+    itemsCount: number;
+}
+
 export interface PurchaseOrderCreateDto {
     poNumber: string;
     supplierId: number;

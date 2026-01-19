@@ -1,7 +1,7 @@
 "use client";
 
 import { poServices } from "@/services/poservice";
-import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderDto, PurchaseOrderStatus } from "@/types/purchaseorder";
+import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderDto, PurchaseOrderListDto, PurchaseOrderStatus } from "@/types/purchaseorder";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import CreatePOModal from "./createpomodal";
@@ -12,7 +12,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 // import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
-
 
 export const initialPOForm =
 {
@@ -33,7 +32,7 @@ export default function CreatePOPage() {
     const [suppliers, setSuppliers] = useState<{ id: number; name: string; supplierCode: string; address: string }[]>([]);
 
     const [products, setProducts] = useState<{ id: number; name: string; unitName: string, unitId: number }[]>([]);
-    const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderDto[]>([]);
+    const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderListDto[]>([]);
 
     useEffect(() => {
 
@@ -56,15 +55,17 @@ export default function CreatePOPage() {
         }
         loadDropDown();
     }, []);
-        const fetchData = async()=>{
+
+    const fetchData = async () => {
         try {
-                const res = await fetch("http://localhost:5058/api/purchaseorder");
-                const data = await res.json();
-                setPurchaseOrders(data);
+            const res = await fetch("http://localhost:5058/api/purchaseorder");
+            const json = await res.json();
+            setPurchaseOrders(json.data);
         } catch (error) {
             console.error("Failed to fetch purchase orders:", error);
         }
     };
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -100,7 +101,7 @@ export default function CreatePOPage() {
 
     };
 
-    function handleEdit(po: PurchaseOrderDto): void {
+    function handleEdit(po: PurchaseOrderListDto): void {
         throw new Error("Function not implemented.");
     }
 
@@ -108,7 +109,7 @@ export default function CreatePOPage() {
         throw new Error("Function not implemented.");
     }
 
-    function handleView(po: PurchaseOrderDto): void {
+    function handleView(po: PurchaseOrderListDto): void {
         throw new Error("Function not implemented.");
     }
 

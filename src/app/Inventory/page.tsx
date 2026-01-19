@@ -19,6 +19,7 @@ export default function InventoryStockPage() {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false); // New state for ViewStockModal
   const [addStockOpen, setAddStockOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState<InventoryStockDto | null>(null);
+
   // Fetch data from your backend
   const fetchStocks = async () => {
     try {
