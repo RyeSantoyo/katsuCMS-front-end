@@ -1,14 +1,14 @@
 "use client";
 
 import { poServices } from "@/services/poservice";
-import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderDto, PurchaseOrderListDto, PurchaseOrderStatus } from "@/types/purchaseorder";
+import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderListDto, PurchaseOrderStatus } from "@/types/purchaseorder";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import CreatePOModal from "./createpomodal";
 import { supplierServices } from "@/services/supplierservice";
 import { productServices } from "@/services/productservice";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 // import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
@@ -106,75 +106,83 @@ export default function CreatePOPage() {
 
     };
 
-    function handleEdit(po: PurchaseOrderListDto): void {
-        throw new Error("Function not implemented.");
-    }
-
-    function handleDelete(id: number, poNumber: string): void {
-        throw new Error("Function not implemented.");
-    }
-
-    const handleView = (po: PurchaseOrderListDto) => {
-        // Implement view functionality
+    const handleEdit = (po: PurchaseOrderListDto) => {
         setSelectedPo(po);
         setIsPoViewOpen(true);
-    
     }
 
-    // const handleEdit = (po: PurchaseOrderCreateDto) => {
-    //     // Implement edit functionality
-    // };
-    //     const handleDelete = (id: number, poNumber: string) => {
-    //     // Implement delete functionality
-    // };
-    return (
-        <>
-            <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
-                <Card>
-                    <CardHeader className="flex flex-row justify-between items-center pb-4">
-                        <div>
-                            <CardTitle className="flex items-center gap-2"> Purchase Order </CardTitle>
-                            <p className="text-sm text-muted-foreground"> Manage your purchase orders </p>
-                        </div>
-                        <Button onClick={() => setOpen(true)}>Create PO</Button>
-                    </CardHeader>
+    const handleDelete = async (id: number, poNumber: string) => {
+        if (confirm(`Are you sure you want to delete Purchase Order "${poNumber}"?`)) {
+            try {
+                await fetch(`http://localhost:5058/api/purchaseorder/${id}`, { method: "DELETE" });
+                setPurchaseOrders((prev) => prev.filter((po) => po.id !== id));
+            } catch (error) {
+                console.error("Failed to delete Purchase Order:", error);
+            }
+        }
+    }
 
-                </Card>
-                <br />
-                <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />
+        const handleView = (po: PurchaseOrderListDto) => {
+            // Implement view functionality
+            setSelectedPo(po);
+            setIsPoViewOpen(true);
+
+        }
+
+        // const handleEdit = (po: PurchaseOrderCreateDto) => {
+        //     // Implement edit functionality
+        // };
+        //     const handleDelete = (id: number, poNumber: string) => {
+        //     // Implement delete functionality
+        // };
+        return (
+            <>
+                <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
+                    <Card>
+                        <CardHeader className="flex flex-row justify-between items-center pb-4">
+                            <div>
+                                <CardTitle className="flex items-center gap-2"> Purchase Order </CardTitle>
+                                <p className="text-sm text-muted-foreground"> Manage your purchase orders </p>
+                            </div>
+                            <Button onClick={() => setOpen(true)}>Create PO</Button>
+                        </CardHeader>
+
+                    </Card>
+                    <br />
+                    <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />
 
 
-                <CreatePOModal
-                    open={open}
-                    onClose={() => setOpen(false)}
-                    setOpen={setOpen}
-                    form={form}
-                    setForm={setForm}
-                    onSubmitted={handleSubmit}
-                    suppliers={suppliers}
-                    products={products}
-                    setSuppliers={setSuppliers}
-                    setProducts={setProducts}
-                />
+                    <CreatePOModal
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        setOpen={setOpen}
+                        form={form}
+                        setForm={setForm}
+                        onSubmitted={handleSubmit}
+                        suppliers={suppliers}
+                        products={products}
+                        setSuppliers={setSuppliers}
+                        setProducts={setProducts}
+                    />
 
-                <ViewPo
-                    open={isPoViewOpen}
-                    onClose={() => setIsPoViewOpen(false)}
-                    purchaseOrderId={selectedPo?.id || 0}
-                    supplierName={selectedPo?.supplierName}
-                    orderDate={selectedPo?.orderDate}
-                    totalAmount={selectedPo?.totalAmount}
-                    status={selectedPo?.status?.toString()}
-                    products = {selectedPo?.itemsCount ? Array.from({ length: selectedPo.itemsCount }, (_, i) => ({
-                        productName: `Product ${i + 1}`,
-                        quantity: 1,
-                        unitPrice: selectedPo.totalAmount / selectedPo.itemsCount,
-                        totalPrice: selectedPo.totalAmount / selectedPo.itemsCount
-                    }) ) : ([]
-                )}
-                />
+                    <ViewPo
+                        open={isPoViewOpen}
+                        onClose={() => setIsPoViewOpen(false)}
+                        purchaseOrderId={selectedPo?.id || 0}
+                        supplierName={selectedPo?.supplierName}
+                        orderDate={selectedPo?.orderDate}
+                        totalAmount={selectedPo?.totalAmount}
+                        status={selectedPo?.status?.toString()}
+                        products={selectedPo?.itemsCount ? Array.from({ length: selectedPo.itemsCount }, (_, i) => ({
+                            productName: `Product ${i + 1}`,
+                            quantity: 1,
+                            unitPrice: selectedPo.totalAmount / selectedPo.itemsCount,
+                            totalPrice: selectedPo.totalAmount / selectedPo.itemsCount
+                        })) : ([]
+                        )}
+                    />
 
-            </div>
-        </>
-    );
-}
+                </div>
+            </>
+        );
+    }
