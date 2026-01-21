@@ -1,7 +1,7 @@
 "use client";
 
 import { poServices } from "@/services/poservice";
-import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderListDto, PurchaseOrderStatus } from "@/types/purchaseorder";
+import { POForm, POFormItems, PurchaseOrderCreateDto, PurchaseOrderDto, PurchaseOrderListDto, PurchaseOrderStatus } from "@/types/purchaseorder";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import CreatePOModal from "./createpomodal";
@@ -13,6 +13,7 @@ import { DataTable } from "@/components/data-table";
 // import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
 import ViewPo from "./viewpo";
+import { Loader2, PlusCircle, RefreshCcw } from "lucide-react";
 
 export const initialPOForm =
 {
@@ -30,6 +31,9 @@ export default function CreatePOPage() {
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState<POForm>(initialPOForm);
 
+    const [refresh, startRefresh] = useState(false);
+    const [isLoading, startLoading] = useState(false);
+
     const [isPoViewOpen, setIsPoViewOpen] = useState(false);
 
     const [suppliers, setSuppliers] = useState<{ id: number; name: string; supplierCode: string; address: string }[]>([]);
@@ -37,7 +41,7 @@ export default function CreatePOPage() {
     const [products, setProducts] = useState<{ id: number; name: string; unitName: string, unitId: number }[]>([]);
     const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderListDto[]>([]);
 
-    const [selectedPo, setSelectedPo] = useState<PurchaseOrderListDto | null>(null);
+    const [selectedPo, setSelectedPo] = useState<PurchaseOrderDto | null>(null);
 
     useEffect(() => {
 
@@ -63,11 +67,17 @@ export default function CreatePOPage() {
 
     const fetchData = async () => {
         try {
+            startLoading(true);
+            startRefresh(true);
             const res = await fetch("http://localhost:5058/api/purchaseorder");
             const json = await res.json();
             setPurchaseOrders(json.data);
         } catch (error) {
             console.error("Failed to fetch purchase orders:", error);
+        }
+        finally {
+            startRefresh(false);
+            startLoading(false);
         }
     };
 
@@ -88,6 +98,7 @@ export default function CreatePOPage() {
                 productId: typeof i.productId === "number" ? i.productId : Number(i.productId),
                 productName: products.find(p => p.id === (typeof i.productId === "number" ? i.productId : Number(i.productId)))?.name || "",
                 quantity: i.quantity,
+                totalAmount: i.subTotal,
                 unitPrice: i.unitPrice,
                 unitId: products.find(p => p.id === (typeof i.productId === "number" ? i.productId : Number(i.productId)))?.unitId || 0,
                 subtotal: i.subTotal
@@ -106,9 +117,17 @@ export default function CreatePOPage() {
 
     };
 
-    const handleEdit = (po: PurchaseOrderListDto) => {
-        setSelectedPo(po);
-        setIsPoViewOpen(true);
+    const handleEdit = async (po: PurchaseOrderListDto) => {
+        try {
+            const res = await fetch(`http://localhost:5058/api/purchaseorder/${po.id}`);
+            const json = await res.json();
+
+            setSelectedPo(json.data); // PurchaseOrderDto
+            setIsPoViewOpen(true);
+        } catch (error) {
+            console.error("Failed to load purchase order details", error);
+            toast.error("Failed to load PO details");
+        }
     }
 
     const handleDelete = async (id: number, poNumber: string) => {
@@ -121,68 +140,106 @@ export default function CreatePOPage() {
             }
         }
     }
+    useEffect(() => {
+        console.log("Selected PO:", selectedPo);
+        console.log("Order Details:", selectedPo?.purchaseOrderDetails);
+    }, [selectedPo]);
 
-        const handleView = (po: PurchaseOrderListDto) => {
-            // Implement view functionality
-            setSelectedPo(po);
+    const handleView = async (po: PurchaseOrderListDto) => {
+        try {
+            const res = await fetch(`http://localhost:5058/api/purchaseorder/${po.id}`);
+            const json = await res.json();
+
+            setSelectedPo(json.data);
             setIsPoViewOpen(true);
-
+        } catch (error) {
+            console.error("Failed to load PO details", error);
         }
+    };
 
-        // const handleEdit = (po: PurchaseOrderCreateDto) => {
-        //     // Implement edit functionality
-        // };
-        //     const handleDelete = (id: number, poNumber: string) => {
-        //     // Implement delete functionality
-        // };
+    console.log("ViewPo received products:", products);
+
+
+    // const handleEdit = (po: PurchaseOrderCreateDto) => {
+    //     // Implement edit functionality
+    // };
+    //     const handleDelete = (id: number, poNumber: string) => {
+    //     // Implement delete functionality
+    // };
+
+    if (isLoading) {
         return (
-            <>
-                <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
-                    <Card>
-                        <CardHeader className="flex flex-row justify-between items-center pb-4">
-                            <div>
-                                <CardTitle className="flex items-center gap-2"> Purchase Order </CardTitle>
-                                <p className="text-sm text-muted-foreground"> Manage your purchase orders </p>
-                            </div>
-                            <Button onClick={() => setOpen(true)}>Create PO</Button>
-                        </CardHeader>
-
-                    </Card>
-                    <br />
-                    <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />
-
-
-                    <CreatePOModal
-                        open={open}
-                        onClose={() => setOpen(false)}
-                        setOpen={setOpen}
-                        form={form}
-                        setForm={setForm}
-                        onSubmitted={handleSubmit}
-                        suppliers={suppliers}
-                        products={products}
-                        setSuppliers={setSuppliers}
-                        setProducts={setProducts}
-                    />
-
-                    <ViewPo
-                        open={isPoViewOpen}
-                        onClose={() => setIsPoViewOpen(false)}
-                        purchaseOrderId={selectedPo?.id || 0}
-                        supplierName={selectedPo?.supplierName}
-                        orderDate={selectedPo?.orderDate}
-                        totalAmount={selectedPo?.totalAmount}
-                        status={selectedPo?.status?.toString()}
-                        products={selectedPo?.itemsCount ? Array.from({ length: selectedPo.itemsCount }, (_, i) => ({
-                            productName: `Product ${i + 1}`,
-                            quantity: 1,
-                            unitPrice: selectedPo.totalAmount / selectedPo.itemsCount,
-                            totalPrice: selectedPo.totalAmount / selectedPo.itemsCount
-                        })) : ([]
-                        )}
-                    />
-
-                </div>
-            </>
-        );
+            <div className="flex justify-center items-center h-[70vh] text-gray-500">
+                <Loader2 className=" h-6 w-6 animate-spin mr-2" /> Loading Orders.
+            </div>
+        )
     }
+
+    return (
+        <>
+            <div className="p-4 bg-gray rounded shadow max-w-7xl mx-auto mt-10">
+                <Card>
+                    <CardHeader className="flex flex-row justify-between items-center pb-4">
+                        <div>
+                            <CardTitle className="flex items-center gap-2"> Purchase Order </CardTitle>
+                            <p className="text-sm text-muted-foreground"> Manage your purchase orders </p>
+                        </div>
+                        <div className="flex gap-2">
+                            <Button variant={"outline"} onClick={(fetchData)} disabled={refresh}>
+                                {refresh ? (
+                                    <>
+                                        <Loader2 className="animate-spin h-4 w-4 w-4 mr-2" /> Refreshing....
+                                    </>
+                                ) : (
+                                    <>
+                                        <RefreshCcw className="h-4 w-4 mr-2" /> Refresh
+                                    </>
+                                )}
+                            </Button>
+                            <Button onClick={() => setOpen(true)}>
+                                <PlusCircle className="h-4 w-4 mr-2" /> New Purchase Order
+                            </Button>
+                        </div>
+
+                    </CardHeader>
+
+                </Card>
+                <br />
+                <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />
+
+
+                <CreatePOModal
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    setOpen={setOpen}
+                    form={form}
+                    setForm={setForm}
+                    onSubmitted={handleSubmit}
+                    suppliers={suppliers}
+                    products={products}
+                    setSuppliers={setSuppliers}
+                    setProducts={setProducts}
+                />
+
+                <ViewPo
+                    open={isPoViewOpen}
+                    onClose={() => setIsPoViewOpen(false)}
+                    purchaseOrderId={selectedPo?.id || 0}
+                    poNumber={selectedPo?.poNumber}
+                    supplierName={selectedPo?.supplierName}
+                    orderDate={selectedPo?.orderDate}
+                    totalAmount={selectedPo?.totalAmount}
+                    status={selectedPo?.status?.toString()}
+                    products={selectedPo?.purchaseOrderDetails?.map(d => ({
+                        productName: d.productName,
+                        quantity: d.quantity,
+                        unitPrice: d.unitPrice,
+                        totalPrice: d.quantity * d.unitPrice
+                    })) ?? []}
+                />
+
+
+            </div>
+        </>
+    );
+}

@@ -7,11 +7,18 @@ interface ViewPoProps{
     open: boolean;
     onClose: () => void;
     purchaseOrderId: number;
+    poNumber?: string;
     supplierName?: string;
     orderDate?: string;
     totalAmount?: number;
     status?: string;
-    products?: Array<{ productName: string; quantity: number; unitPrice: number; totalPrice: number }>;
+    productName?: string;
+    products?: {
+        productName: string;
+        quantity: number;
+        unitPrice: number;
+        totalPrice: number;
+    }[];
 }
 
 function DetailItem({ label, value }: { label: string; value?: string | number | null }) {
@@ -27,6 +34,8 @@ export default function ViewPo({
     open,
     onClose,
     purchaseOrderId,
+    poNumber,
+    //productName,
     supplierName,
     orderDate,
     totalAmount,
@@ -52,6 +61,7 @@ export default function ViewPo({
                         </h3>
                         <div className="grid grid-cols-2 gap-4">
                             <DetailItem label="Purchase Order ID" value={purchaseOrderId} />
+                            <DetailItem label="Purchase Order Number" value={poNumber} />                           
                             <DetailItem label="Supplier Name" value={supplierName} />
                             <DetailItem label="Order Date" value={orderDate} />
                             <DetailItem label="Total Amount" value={totalAmount} />
@@ -60,7 +70,7 @@ export default function ViewPo({
                     </div>
                     <div>
                         <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                            Products
+                            Ordered Items
                         </h3>
                         <div className="space-y-2">
                             {products && products.length > 0 ? (
@@ -68,6 +78,7 @@ export default function ViewPo({
                                     <div key={index} className="p-4 border rounded-md">
                                         <DetailItem label="Product Name" value={product.productName} />
                                         <DetailItem label="Quantity" value={product.quantity} />
+                                        <DetailItem label="Supplier Name" value={supplierName} />
                                         <DetailItem label="Unit Price" value={product.unitPrice} />
                                         <DetailItem label="Total Price" value={product.totalPrice} />
                                     </div>

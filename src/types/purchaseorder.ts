@@ -3,21 +3,30 @@ export interface PurchaseOrderDto {
     poNumber: string;
     supplierId: number;
     supplierCode: string;
+    supplierName: string;
     orderDate: string;
     status: PurchaseOrderStatus;
     totalAmount: number;
     createdDate: string;
     updatedAt: string;
-    orderDetails: PurchaseOrderDetailDto[];
+    purchaseOrderDetails: PurchaseOrderDetailDto[];
 }
 export interface PurchaseOrderListDto {
     id: number;
     poNumber: string;
+    productName: string;
     supplierName: string;
     orderDate: string;
     status: PurchaseOrderStatus;
     totalAmount: number;
     itemsCount: number;
+    quantity: number;
+    products?: {
+        productName: string;
+        quantity: number;
+        unitPrice: number;
+        totalPrice: number;
+    }[];
 }
 
 export interface PurchaseOrderCreateDto {
@@ -51,6 +60,8 @@ export enum PurchaseOrderStatus {
 }
 
 export interface PurchaseOrderDetailDto {
+    totalAmount: number;
+    productName: string;
     productId: number;
     quantity: number;
     unitPrice: number;
