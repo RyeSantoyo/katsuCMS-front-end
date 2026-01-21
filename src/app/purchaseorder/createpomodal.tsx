@@ -94,6 +94,11 @@ export default function CreatePOModal({
         }
     }
 
+    const onClosed = () => {
+        setOpen(false);
+        setForm(initialPOForm);
+    };
+
     const addProductRow = () => {
         setForm(prev => ({
             ...prev,
@@ -247,6 +252,7 @@ export default function CreatePOModal({
                             <tr className="text-sm font-medium text-gray-500 border-b">
                                 <th className="pb-2">Product</th>
                                 <th className="pb-2">Quantity</th>
+                                <th className="pb-2">UOM</th>
                                 <th className="pb-2">Unit Price</th>
                                 <th className="pb-2">Sub Total</th>
                             </tr>
@@ -278,6 +284,14 @@ export default function CreatePOModal({
                                     </td>
                                     <td className="py-3 pr-2">
                                         <input
+                                            type="text"
+                                            value={item.unitName}
+                                            readOnly
+                                            className="w-full border rounded px-2 py-1 bg-gray-100"
+                                        />
+                                    </td>
+                                    <td className="py-3 pr-2">
+                                        <input
                                             type="number"
                                             value={item.unitPrice?.toString() || ""}
                                             readOnly
@@ -292,6 +306,11 @@ export default function CreatePOModal({
                                             className="w-full border rounded px-2 py-1 bg-gray-100 text-right"
                                         />
                                     </td>
+                                    <td className="py-3 pr-2">
+                                        <Button variant="ghost" size="sm" onClick={() => removeRow(index)}>
+                                            X
+                                        </Button>
+                                        </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -304,7 +323,9 @@ export default function CreatePOModal({
                     </div>
                     { /* Add more form fields as necessary */}
                     <DialogFooter className="pt-4">
-                        <Button variant="outline" onClick={onClose}>Cancel</Button>
+                        <Button
+                         variant="outline"
+                          onClick={onClosed}>Cancel</Button>
                         <Button onClick={onSubmitted}>Submit</Button>
                     </DialogFooter>
             </DialogContent>
