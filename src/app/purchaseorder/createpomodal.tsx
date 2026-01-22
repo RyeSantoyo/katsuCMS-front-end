@@ -76,7 +76,7 @@ export default function CreatePOModal({
 
     const handleSupplierChange = async (supplierId: number) => {
         setForm(prev => ({ ...prev, supplierId, items: [], totalAmount: 0 }));
-        try { 
+        try {
             const res = await productServices.getAll();
             const filtered = res.filter(p => p.supplierIds.includes(supplierId));
             setProducts(
@@ -179,7 +179,7 @@ export default function CreatePOModal({
     if (!open) return null;
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="max-w-3xl">
+            <DialogContent className="max">
                 <DialogHeader>
                     <DialogTitle>Create Purchase Order</DialogTitle>
                     <DialogDescription>
@@ -228,11 +228,11 @@ export default function CreatePOModal({
                     </div>
                 </div>
                 <div className="bg-muted p-3 rounded text-sm">
-                    Supplier Info: (Will auto-fill when a supplier is selected)
+                    <strong>Supplier Details : </strong>
                     <div>
-                        <strong>Supplier Name:</strong>{suppliers.find(s => s.id === form.supplierId)?.name || "N/A"} </div>
+                        <strong>Supplier Name : </strong>{suppliers.find(s => s.id === form.supplierId)?.name || "N/A"} </div>
                     <div>
-                        <strong>Supplier Code:</strong> {suppliers.find(s => s.id === form.supplierId)?.supplierCode || "N/A"}
+                        <strong>Supplier Code : </strong> {suppliers.find(s => s.id === form.supplierId)?.supplierCode || "N/A"}
                     </div>
                     <div>
                         <strong>Address:</strong> {suppliers.find(s => s.id === form.supplierId)?.address || "N/A"}
@@ -252,7 +252,8 @@ export default function CreatePOModal({
                             <tr className="text-sm font-medium text-gray-500 border-b">
                                 <th className="pb-2">Product</th>
                                 <th className="pb-2">Quantity</th>
-                                <th className="pb-2">UOM</th>
+                                <th className="pb-2">Base Unit</th>
+                                <th className="pb-2">Unit </th>
                                 <th className="pb-2">Unit Price</th>
                                 <th className="pb-2">Sub Total</th>
                             </tr>
@@ -292,6 +293,14 @@ export default function CreatePOModal({
                                     </td>
                                     <td className="py-3 pr-2">
                                         <input
+                                            type="text"
+                                            value={item.unitName}
+                                            readOnly
+                                            className="w-full border rounded px-2 py-1 bg-gray-100"
+                                        />
+                                    </td>
+                                    <td className="py-3 pr-2">
+                                        <input
                                             type="number"
                                             value={item.unitPrice?.toString() || ""}
                                             readOnly
@@ -310,7 +319,7 @@ export default function CreatePOModal({
                                         <Button variant="ghost" size="sm" onClick={() => removeRow(index)}>
                                             X
                                         </Button>
-                                        </td>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -318,16 +327,16 @@ export default function CreatePOModal({
                     </table>
                 </div>
 
-                    <div className="mt-4 text-right font-semibold text-lg">
-                        Total : {form.totalAmount.toFixed(2)}
-                    </div>
-                    { /* Add more form fields as necessary */}
-                    <DialogFooter className="pt-4">
-                        <Button
-                         variant="outline"
-                          onClick={onClosed}>Cancel</Button>
-                        <Button onClick={onSubmitted}>Submit</Button>
-                    </DialogFooter>
+                <div className="mt-4 text-right font-semibold text-lg">
+                    Total : {form.totalAmount.toFixed(2)}
+                </div>
+                { /* Add more form fields as necessary */}
+                <DialogFooter className="pt-4">
+                    <Button
+                        variant="outline"
+                        onClick={onClosed}>Cancel</Button>
+                    <Button onClick={onSubmitted}>Submit</Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

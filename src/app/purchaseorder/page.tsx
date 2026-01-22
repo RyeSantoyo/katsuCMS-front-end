@@ -14,6 +14,7 @@ import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
 import ViewPo from "./viewpo";
 import { Loader2, PlusCircle, RefreshCcw } from "lucide-react";
+import EditPo from "./editpo";
 
 export const initialPOForm =
 {
@@ -35,6 +36,8 @@ export default function CreatePOPage() {
     const [isLoading, startLoading] = useState(false);
 
     const [isPoViewOpen, setIsPoViewOpen] = useState(false);
+
+    const [isPoEditOpen, setIsPoEditOpen] = useState(false);
 
     const [suppliers, setSuppliers] = useState<{ id: number; name: string; supplierCode: string; address: string }[]>([]);
 
@@ -123,7 +126,7 @@ export default function CreatePOPage() {
             const json = await res.json();
 
             setSelectedPo(json.data); // PurchaseOrderDto
-            setIsPoViewOpen(true);
+            setIsPoEditOpen(true);
         } catch (error) {
             console.error("Failed to load purchase order details", error);
             toast.error("Failed to load PO details");
@@ -227,6 +230,23 @@ export default function CreatePOPage() {
                     purchaseOrderId={selectedPo?.id || 0}
                     poNumber={selectedPo?.poNumber}
                     supplierName={selectedPo?.supplierName}
+                    orderDate={selectedPo?.orderDate}
+                    totalAmount={selectedPo?.totalAmount}
+                    status={selectedPo?.status?.toString()}
+                    products={selectedPo?.purchaseOrderDetails?.map(d => ({
+                        productName: d.productName,
+                        quantity: d.quantity,
+                        unitPrice: d.unitPrice,
+                        totalPrice: d.quantity * d.unitPrice
+                    })) ?? []}
+                />
+
+                <EditPo
+                    open={isPoEditOpen}
+                    onClose={() => setIsPoEditOpen(false)}
+                    purchaseOrderId={selectedPo?.id || 0}
+                    poNumber={selectedPo?.poNumber}
+                    supplierName=""
                     orderDate={selectedPo?.orderDate}
                     totalAmount={selectedPo?.totalAmount}
                     status={selectedPo?.status?.toString()}
