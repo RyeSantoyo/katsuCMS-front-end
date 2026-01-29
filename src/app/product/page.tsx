@@ -16,7 +16,7 @@ import { SupplierDto } from "@/types/supplier";
 // import SupplierMultiSelect, { CategoryMultiSelect } from "./multi-select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import AddProductModal from "./addproductmodal";
-import { Edit } from "lucide-react";
+//import { Edit } from "lucide-react";
 import EditProductModal from "./editproductmodal";
 //import { parse } from "path";
 
@@ -33,7 +33,7 @@ export default function ProductPage() {
     const [newUnit, setNewUnit] = useState("");
 
     const [showAddModal, setShowAddModal] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState<ProductDto | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -208,7 +208,15 @@ export default function CreatePOPage() {
 
                 </Card>
                 <br />
-                <DataTable columns={columns({ onEdit: handleEdit, onDelete: handleDelete, onView: handleView })} data={purchaseOrders} />
+                <DataTable columns={columns({ 
+                    onEdit: 
+                    handleEdit, 
+                    onDelete: 
+                    handleDelete, 
+                    onView: 
+                    handleView })} 
+                    data={purchaseOrders}
+                     />
 
 
                 <CreatePOModal

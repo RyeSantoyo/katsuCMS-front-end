@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { /*PurchaseOrderDto,*/ PurchaseOrderListDto } from "@/types/purchaseorder";
+import { /*PurchaseOrderDto,*/ PurchaseOrderListDto, /*PurchaseOrderStatus*/ } from "@/types/purchaseorder";
 
 import {
     DropdownMenu,
@@ -34,7 +34,19 @@ export const columns = ({ onDelete, onEdit, onView }: {
         },
         {
             accessorKey: "status",
-            header: "Status"
+            header: "Status",
+            // cell: ({ row }) => {
+
+            //     const status = row.original.status;
+            //     const bgColor = status === PurchaseOrderStatus.Cancelled ? 'transparent' : '#2b2524';
+
+            //     return (
+
+            //         <span style={{ backgroundColor: bgColor, padding: '4px 8px', borderRadius: '4px', color: 'white' }}>
+            //             {status}
+            //         </span>
+            //     );
+            // }
         },
         {
             accessorKey: "totalAmount",
