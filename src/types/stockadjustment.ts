@@ -1,22 +1,26 @@
-export interface StockAdjustmentDto{
+export interface StockAdjustmentDto {
     id: number;
     productName: string,
     productCode: string,
     unitName: string,
     previousQuantity: number;
     adjustedQuantity: number;
+    reorderLevel: number;
+    preferredStockLevel: number;
     adjustmentType: string;
     reason: string;
-    adjustmentDate: string;   
+    adjustmentDate: string;
 }
 
-export interface StockAdjusmentCreateDto{
+export interface StockAdjustmentCreateDto {
     inventoryStockId: number;
     adjustmentType: string;
+    reorderLevel: number;
+    preferredStockLevel: number;
     adjustedQuantity: number;
     reason: string;
 }
 
-export interface StockAdjustmentUpdateDto extends StockAdjusmentCreateDto{
+export interface StockAdjustmentUpdateDto extends StockAdjustmentCreateDto {
     id: number;
 }

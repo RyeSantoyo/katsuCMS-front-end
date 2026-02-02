@@ -28,6 +28,8 @@ export default function StockAdjustmentModal({
 
   const [adjustmentType, setAdjustmentType] = useState("Add");
   const [adjustedQuantity, setAdjustedQuantity] = useState<number>(0);
+  const [reorderLevel, setReorderLevel] = useState<number>(0);
+  const [preferredStockLevel, setPreferredStock] = useState<number>(0);
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -44,7 +46,9 @@ export default function StockAdjustmentModal({
         inventoryStockId: stockId,
         adjustmentType,
         adjustedQuantity,
-        reason
+        reason,
+        reorderLevel,
+        preferredStockLevel,
 
       });
 
@@ -80,6 +84,26 @@ export default function StockAdjustmentModal({
           <div>
             <Label>Current Quantity</Label>
             <p className="text-sm text-muted-foreground">{currentQuantity}</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Re-Order Level</Label>
+              <Input
+                type="number"
+                value={reorderLevel}
+                onChange={(e) => setReorderLevel(Number(e.target.value))}
+              />
+            </div>
+
+            <div>
+              <Label>Preferred Stock</Label>
+              <Input
+                type="number"
+                value={preferredStockLevel}
+                onChange={(e) => setPreferredStock(Number(e.target.value))}
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

@@ -95,7 +95,9 @@ export default function StockAddModal({ open, onClose, onCreated }: StockAddProp
             const dto: InventoryStockCreateDto = {
                 productId: selectedProduct.id,
                 unitId: selectedProduct.unitId,
+                productCode: selectedProduct.productCode,
                 quantity,
+                price: selectedProduct.price,
                 reorderLevel,
                 preferredStockLevel: reorderLevel,
                 supplierIds: selectedSupplier.map(s => s.value),

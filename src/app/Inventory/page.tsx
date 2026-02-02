@@ -156,6 +156,7 @@ export default function InventoryStockPage() {
         productName={selectedStock?.productName}
         unitName={selectedStock?.unitName}
         category={selectedStock?.category}
+        price={selectedStock?.price}
         currentQuantity={selectedStock?.quantity}
         inventoryValue={selectedStock?.inventoryValue}
       // onAdjustmentSuccess={fetchStocks}

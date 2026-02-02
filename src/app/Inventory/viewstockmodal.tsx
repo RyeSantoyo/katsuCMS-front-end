@@ -12,6 +12,7 @@ interface ViewStockModalProps {
     currentQuantity?: number;
     unitName?: string;
     category?: string;
+    price?: number;
     inventoryValue?: number;
 }
 
@@ -33,6 +34,7 @@ export default function ViewStockModal({
     currentQuantity,
     unitName,
     category,
+    price,
     inventoryValue,
 }: ViewStockModalProps) {
 
@@ -74,10 +76,13 @@ export default function ViewStockModal({
                                 value={currentQuantity?.toLocaleString()}
                             />
                             <DetailItem
+                                label="Unit Price"
+                                value={`₱ ${price?.toLocaleString()}`} />
+                            <DetailItem
                                 label="Inventory Value"
                                 value={
                                     inventoryValue
-                                        ? `₱${inventoryValue.toLocaleString()}`
+                                        ? ` ₱${inventoryValue.toLocaleString()}`
                                         : "-"
                                 }
                             />

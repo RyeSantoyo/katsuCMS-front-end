@@ -11,6 +11,7 @@ export interface InventoryStockDto{
     isLowStock : boolean;
     inventoryValue : number;
     lastUpdated: string;
+    price: number;
     supplierId: number[];
     supplierNames : string[];
 }
@@ -19,6 +20,8 @@ export interface InventoryStockCreateDto {
     productId: number;
     unitId: number;
     quantity: number;
+    productCode: string;
+    price: number;
     reorderLevel: number;
     preferredStockLevel: number;
     supplierIds: number[];   // MUST be plural
