@@ -13,6 +13,7 @@ interface StockAdjustmentModalProps {
   onClose: () => void;
   stockId: number | null;
   productName?: string;
+  productCode?: string;
   currentQuantity?: number;
   onAdjustmentSuccess?: () => void;
 }
@@ -23,6 +24,7 @@ export default function StockAdjustmentModal({
   stockId,
   productName,
   currentQuantity,
+  productCode,
   onAdjustmentSuccess
 }: StockAdjustmentModalProps) {
 
@@ -30,6 +32,7 @@ export default function StockAdjustmentModal({
   const [adjustedQuantity, setAdjustedQuantity] = useState<number>(0);
   const [reorderLevel, setReorderLevel] = useState<number>(0);
   const [preferredStockLevel, setPreferredStock] = useState<number>(0);
+  const [getProductCode, setProductCode] = useState<string>("");
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -43,6 +46,7 @@ export default function StockAdjustmentModal({
     setLoading(true);
     try {
       await adjustmentServices.create({
+        productCode: productCode || getProductCode,
         inventoryStockId: stockId,
         adjustmentType,
         adjustedQuantity,
@@ -76,10 +80,19 @@ export default function StockAdjustmentModal({
         </DialogHeader>
 
         <div className="grid gap-4 py-2">
-          <div>
-            <Label>Product</Label>
-            <p className="text-sm text-muted-foreground">{productName}</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Product</Label>
+              <p className="text-sm text-muted-foreground">{productName}</p>
+
+            </div>
+            <div>
+              <Label>Product Code</Label>
+              <p className="text-sm text-muted-foreground">{productCode}</p>
+            </div>
           </div>
+
+
 
           <div>
             <Label>Current Quantity</Label>

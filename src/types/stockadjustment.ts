@@ -13,6 +13,7 @@ export interface StockAdjustmentDto {
 }
 
 export interface StockAdjustmentCreateDto {
+    productCode: string;
     inventoryStockId: number;
     adjustmentType: string;
     reorderLevel: number;

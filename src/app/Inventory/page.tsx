@@ -137,6 +137,7 @@ export default function InventoryStockPage() {
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         stockId={selectedStock?.id ?? null}
+        productCode={selectedStock?.productCode}
         productName={selectedStock?.productName}
         currentQuantity={selectedStock?.quantity}
         onAdjustmentSuccess={fetchStocks}
