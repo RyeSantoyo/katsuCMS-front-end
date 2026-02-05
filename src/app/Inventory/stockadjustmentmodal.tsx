@@ -32,7 +32,7 @@ export default function StockAdjustmentModal({
   const [adjustedQuantity, setAdjustedQuantity] = useState<number>(0);
   const [reorderLevel, setReorderLevel] = useState<number>(0);
   const [preferredStockLevel, setPreferredStock] = useState<number>(0);
-  const [getProductCode, setProductCode] = useState<string>("");
+
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +46,7 @@ export default function StockAdjustmentModal({
     setLoading(true);
     try {
       await adjustmentServices.create({
-        productCode: productCode || getProductCode,
+        productCode: productCode ?? "",
         inventoryStockId: stockId,
         adjustmentType,
         adjustedQuantity,
