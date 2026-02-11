@@ -38,7 +38,7 @@ export default function StockAdjustmentModal({
 
   const handleSubmit = async () => {
     if (!stockId) return;
-    if (adjustedQuantity <= 0) {
+    if (adjustedQuantity < 0) {
       toast.error("Please enter a valid quantity.");
       return;
     }
